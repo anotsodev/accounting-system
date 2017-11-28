@@ -65,7 +65,7 @@ def create_user():
                 response.headers['Content-Type'] = 'application/json'
                 return response
             else:
-                error = {'message': "there's something wrong with inserting the data"}
+                error = {'message': "there's something wrong when inserting the data"}
                 error_str = json.dumps(error)
                 response = make_response(error_str, 400)
                 response.headers['Content-Type'] = 'application/json'
@@ -106,11 +106,12 @@ def login_user():
                         'iat': datetime.datetime.utcnow(),
                         'sub': q['username']
                     }
-                return jwt.encode(
-                        payload,
-                        app.config['SECRET'],
-                        algorithm='HS256'
-                    )
+                generated_token = jwt.encode(payload,app.config['SECRET'],algorithm='HS256')
+                return_data = {'token':generated_token.decode('utf-8')}
+                return_data_str = json.dumps(return_data)
+                response = make_response(return_data_str,200)
+                response.headers['Content-Type'] = 'application/json'
+                return response
 
             except Exception as e:
                 return e
@@ -121,17 +122,56 @@ def login_user():
     return response
 
 # user logout
-@app.route('/users/logout')
+@app.route('/users/logout', methods=['POST'])
 def logout():
     token_key = request.headers.get('Authorization')
-    jwt.decode()
-    # blacklisted = mongo.db.blacklisted
-    # blacklisted.insert({'username':})
+    try:
+        decoded = jwt.decode(token_key, app.config['SECRET'], algorithms=['HS256'])
+    except:
+        error = {'message': "Invalid token"}
+        error_str = json.dumps(error)
+        response = make_response(error_str, 400)
+        response.headers['Content-Type'] = 'application/json'
+        return response
+
+    blacklisted = mongo.db.blacklisted
+    blacklisted.insert({'username':decoded['sub'],'token':token_key})
+
+    return json.dumps({'message': 'OK'})
 
 
 @app.route('/users/<username>',methods=['GET'])
-def get_users():
-    pass
+def get_users(username):
+    token_key = request.headers.get('Authorization')
+    blacklisted = mongo.db.blacklisted
+    q = blacklisted.find_one({'token':token_key,'username':username})
+    if q:
+        error = {'message': "Authentication information is missing or invalid"}
+        error_str = json.dumps(error)
+        response = make_response(error_str, 401)
+        response.headers['Content-Type'] = 'application/json'
+        return response
+    try:
+        decoded = jwt.decode(token_key, app.config['SECRET'], algorithms=['HS256'])
+    except:
+        error = {'message': "Authentication information is missing or invalid"}
+        error_str = json.dumps(error)
+        response = make_response(error_str, 401)
+        response.headers['Content-Type'] = 'application/json'
+        return response
+
+    users = mongo.db.users
+    q = users.find_one({'username':username})
+    if q:
+        request_data = {"balance": q['balance'],"email": q['email'],"firstName": q['firstName'],"lastName": q['lastName'],"phone": q['phone'],"username": q['username']}
+        request_data = json.dumps(request_data)
+        response = make_response(request_data,200)
+        return response
+
+    error = {'message':'User not found'}
+    error_str = json.dumps(error)
+    response = make_response(error_str, 404)
+    return response
 
 if __name__ == '__main__':
     app.run()
