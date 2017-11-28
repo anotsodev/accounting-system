@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request, make_response, json
+from flask import Flask, request, make_response, json
 from passlib.hash import sha256_crypt
 from flask_pymongo import PyMongo
 import jwt
@@ -135,25 +135,35 @@ def logout():
         return response
 
     blacklisted = mongo.db.blacklisted
+    q = blacklisted.find_one({'username':decoded['sub'],'token':token_key})
+    if q:
+        error = {'message': "Invalid token"}
+        error_str = json.dumps(error)
+        response = make_response(error_str, 400)
+        response.headers['Content-Type'] = 'application/json'
+        return response
+
     blacklisted.insert({'username':decoded['sub'],'token':token_key})
+    return_data = {'message': 'OK'}
+    return_data_str = json.dumps(return_data)
+    response = make_response(return_data_str,200)
+    return response
 
-    return json.dumps({'message': 'OK'})
-
-
+# retrieve user
 @app.route('/users/<username>',methods=['GET'])
 def get_users(username):
     token_key = request.headers.get('Authorization')
-    blacklisted = mongo.db.blacklisted
-    q = blacklisted.find_one({'token':token_key,'username':username})
-    if q:
+    try:
+        decoded = jwt.decode(token_key, app.config['SECRET'], algorithms=['HS256'])
+    except:
         error = {'message': "Authentication information is missing or invalid"}
         error_str = json.dumps(error)
         response = make_response(error_str, 401)
         response.headers['Content-Type'] = 'application/json'
         return response
-    try:
-        decoded = jwt.decode(token_key, app.config['SECRET'], algorithms=['HS256'])
-    except:
+    blacklisted = mongo.db.blacklisted
+    q = blacklisted.find_one({'username': decoded['sub'], 'token': token_key})
+    if q:
         error = {'message': "Authentication information is missing or invalid"}
         error_str = json.dumps(error)
         response = make_response(error_str, 401)
