@@ -9,7 +9,7 @@ import re
 app = Flask(__name__)
 
 app.config['MONGO_DBNAME'] = 'accounting-system'
-app.config['SECRET'] = 'secret'
+app.config['SECRET'] = 'secret' # change this
 mongo = PyMongo(app)
 
 # CATEGORY SECTION
