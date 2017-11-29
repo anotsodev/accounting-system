@@ -5,7 +5,7 @@ from flask import make_response
 from flask import render_template
 import requests
 
-api_url = 'http://localhost:5000/'
+api_url = 'http://10.5.92.201:5000/'
 
 app = Flask(__name__)
 
@@ -34,7 +34,15 @@ def register():
 
 @app.route('/dashboard')
 def dashboard():
-    return render_template('/dashboard.html')
+    return render_template('dashboard.html')
+
+@app.route('/features')
+def feature():
+    return render_template('features.html')
+
+@app.route('/login')
+def login():
+    return render_template('login.html')
 
 if __name__ == '__main__':
     app.run(port=8080)
