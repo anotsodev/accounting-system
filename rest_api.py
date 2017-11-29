@@ -12,6 +12,228 @@ app.config['MONGO_DBNAME'] = 'accounting-system'
 app.config['SECRET'] = 'secret'
 mongo = PyMongo(app)
 
+# CATEGORY SECTION
+@app.route('/categories',methods=['GET','POST'])
+def categories():
+    # Start Token Checking Section
+    token_key = request.headers.get('Authorization')
+    try:
+        decoded = jwt.decode(token_key, app.config['SECRET'], algorithms=['HS256'])
+    except:
+        error = {'message': "Signature expired. Please log in again."}
+        error_str = json.dumps(error)
+        response = make_response(error_str, 400)
+        response.headers['Content-Type'] = 'application/json'
+        return response
+
+    blacklisted = mongo.db.blacklisted
+    q = blacklisted.find_one({'username': decoded['sub'], 'token': token_key})
+    if q:
+        error = {'message': "Authentication information is missing or invalid"}
+        error_str = json.dumps(error)
+        response = make_response(error_str, 400)
+        response.headers['Content-Type'] = 'application/json'
+        return response
+    # End of Token Checking Section
+
+    if request.method == 'POST':
+        if request.is_json:
+            types = ['income','expense']
+            data = request.get_json()
+            if "name" not in data:
+                error = {'message': 'invalid request body'}
+                error_str = json.dumps(error)
+                response = make_response(error_str, 400)
+                response.headers['Content-Type'] = 'application/json'
+                return response
+            if "type" not in data:
+                error = {'message': 'invalid request body'}
+                error_str = json.dumps(error)
+                response = make_response(error_str, 400)
+                response.headers['Content-Type'] = 'application/json'
+                return response
+            if data['type'] not in types:
+                error = {"invalid_fields": [{"field": "type","reason": data['type']+" is not one of "+str(types)}]}
+                error_str = json.dumps(error)
+                response = make_response(error_str,400)
+                response.headers['Content-Type'] = 'application/json'
+                return response
+            else:
+                categories = mongo.db.categories
+                q = categories.insert(data)
+                if q:
+                    categories.update({'_id': q}, {'id': str(q), 'name': data['name'], 'type': data['type']})
+                    return_data = {"id":str(q),"name":data['name'],"type":data['type']}
+                    return_data_str = json.dumps(return_data)
+                    response = make_response(return_data_str,200)
+                    response.headers['Content-Type'] = 'application/json'
+                    return response
+        else:
+            error = {'message': 'content type error'}
+            error_str = json.dumps(error)
+            response = make_response(error_str, 400)
+            response.headers['Content-Type'] = 'application/json'
+            return response
+
+    categories = mongo.db.categories
+    q = categories.find()
+    data = []
+    for item in q:
+        data.append({'id':str(item['_id']),'name':item['name'], 'type':item['type']})
+
+    request_data = json.dumps(data)
+    response = make_response(request_data,200)
+    response.headers['Content-Type'] = 'application/json'
+    return request_data
+
+
+@app.route('/categories/<category_id>',methods=['GET'])
+def view_category(category_id):
+    # Start Token Checking Section
+    token_key = request.headers.get('Authorization')
+    try:
+        decoded = jwt.decode(token_key, app.config['SECRET'], algorithms=['HS256'])
+    except:
+        error = {'message': "Signature expired. Please log in again."}
+        error_str = json.dumps(error)
+        response = make_response(error_str, 400)
+        response.headers['Content-Type'] = 'application/json'
+        return response
+
+    blacklisted = mongo.db.blacklisted
+    q = blacklisted.find_one({'username': decoded['sub'], 'token': token_key})
+    if q:
+        error = {'message': "Authentication information is missing or invalid"}
+        error_str = json.dumps(error)
+        response = make_response(error_str, 400)
+        response.headers['Content-Type'] = 'application/json'
+        return response
+    # End of Token Checking Section
+    categories = mongo.db.categories
+    q = categories.find_one({'id':category_id})
+    if q:
+        request_data = {'id':q['id'],'name':q['name'],'type':q['type']}
+        request_data_str = json.dumps(request_data)
+        response = make_response(request_data_str,200)
+        response.headers['Content-Type'] = 'application/json'
+
+        return response
+    error = {'message': 'category not found'}
+    error_str = json.dumps(error)
+    response = make_response(error_str, 404)
+    response.headers['Content-Type'] = 'application/json'
+    return response
+
+# RECORDS SECTION
+@app.route('/records',methods=['GET','POST'])
+def records():
+    # Start Token Checking Section
+    token_key = request.headers.get('Authorization')
+    try:
+        decoded = jwt.decode(token_key, app.config['SECRET'], algorithms=['HS256'])
+    except:
+        error = {'message': "Signature expired. Please log in again."}
+        error_str = json.dumps(error)
+        response = make_response(error_str, 400)
+        response.headers['Content-Type'] = 'application/json'
+        return response
+
+    blacklisted = mongo.db.blacklisted
+    q = blacklisted.find_one({'username': decoded['sub'], 'token': token_key})
+    if q:
+        error = {'message': "Authentication information is missing or invalid"}
+        error_str = json.dumps(error)
+        response = make_response(error_str, 400)
+        response.headers['Content-Type'] = 'application/json'
+        return response
+    # end of token checking section
+    if request.method == 'POST':
+        if request.is_json:
+            data = request.get_json()
+            if "amount" not in data:
+                error = {'message': 'invalid request body'}
+                error_str = json.dumps(error)
+                response = make_response(error_str, 400)
+                response.headers['Content-Type'] = 'application/json'
+                return response
+            if "category_id" not in data:
+                error = {'message': 'invalid request body'}
+                error_str = json.dumps(error)
+                response = make_response(error_str, 400)
+                response.headers['Content-Type'] = 'application/json'
+                return response
+            if "description" not in data:
+                error = {'message': 'invalid request body'}
+                error_str = json.dumps(error)
+                response = make_response(error_str, 400)
+                response.headers['Content-Type'] = 'application/json'
+                return response
+            else:
+                records = mongo.db.records
+                q = records.insert(data)
+                if q:
+                    records.update({'_id': q}, {'id': str(q), 'amount': data['amount'], 'category_id': data['category_id'],'description':data['description']})
+                    return_data = {'id': str(q), 'amount': data['amount'], 'category_id': data['category_id'],'description':data['description']}
+                    return_data_str = json.dumps(return_data)
+                    response = make_response(return_data_str,200)
+                    response.headers['Content-Type'] = 'application/json'
+                    return response
+        else:
+            error = {'message': 'content type error'}
+            error_str = json.dumps(error)
+            response = make_response(error_str, 400)
+            response.headers['Content-Type'] = 'application/json'
+            return response
+
+    records = mongo.db.records
+    q = records.find()
+    data = []
+    for item in q:
+        data.append({'id': item['id'],'amount': item['amount'], 'category_id': item['category_id'],'description':item['description']})
+
+    request_data = json.dumps(data)
+    response = make_response(request_data,200)
+    response.headers['Content-Type'] = 'application/json'
+    return request_data
+
+@app.route('/records/<record_id>',methods=['GET'])
+def view_record(record_id):
+    # Start Token Checking Section
+    token_key = request.headers.get('Authorization')
+    try:
+        decoded = jwt.decode(token_key, app.config['SECRET'], algorithms=['HS256'])
+    except:
+        error = {'message': "Signature expired. Please log in again."}
+        error_str = json.dumps(error)
+        response = make_response(error_str, 400)
+        response.headers['Content-Type'] = 'application/json'
+        return response
+
+    blacklisted = mongo.db.blacklisted
+    q = blacklisted.find_one({'username': decoded['sub'], 'token': token_key})
+    if q:
+        error = {'message': "Authentication information is missing or invalid"}
+        error_str = json.dumps(error)
+        response = make_response(error_str, 400)
+        response.headers['Content-Type'] = 'application/json'
+        return response
+    # End of Token Checking Section
+    records = mongo.db.records
+    q = records.find_one({'id':record_id})
+    if q:
+        request_data = {'id':q['id'],'amount':q['amount'],'category_id':q['category_id'],'description':q['description']}
+        request_data_str = json.dumps(request_data)
+        response = make_response(request_data_str,200)
+        response.headers['Content-Type'] = 'application/json'
+        return response
+    error = {'message': 'record not found'}
+    error_str = json.dumps(error)
+    response = make_response(error_str, 404)
+    response.headers['Content-Type'] = 'application/json'
+    return response
+
+
+# USER SECTION
 # register user
 @app.route('/users', methods=['POST'])
 def create_user():
@@ -34,9 +256,25 @@ def create_user():
             return response
         else:
             # check password if in pattern, return 400 response error if not match, else continue
-            pattern = re.compile("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[^\\w\\s]).{8,}$")
-            if not pattern.match(data['password']):
+            password_pattern = re.compile("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[^\\w\\s]).{8,}$")
+            email_pattern = re.compile("(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)")
+            username_pattern = re.compile("([a-z]+[_]+[a-z]*)")
+            if not password_pattern.match(data['password']):
                 error = {"invalid_fields": [{"field": 'password', "reason": "'string' does not match '^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[^\\\\w\\\\s]).{8,}$'"}]}
+                error_str = json.dumps(error)
+                response = make_response(error_str, 400)
+                response.headers['Content-Type'] = 'application/json'
+                return response
+            if not email_pattern.match(data['email']):
+                error = {"invalid_fields": [{"field": 'email',
+                                             "reason": "'string' does not match '^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)'"}]}
+                error_str = json.dumps(error)
+                response = make_response(error_str, 400)
+                response.headers['Content-Type'] = 'application/json'
+                return response
+            if not username_pattern.match(data['username']):
+                error = {"invalid_fields": [{"field": 'username',
+                                             "reason": "this only accepts lowercase letter and underscore, and should start with letter"}]}
                 error_str = json.dumps(error)
                 response = make_response(error_str, 400)
                 response.headers['Content-Type'] = 'application/json'
@@ -124,24 +362,27 @@ def login_user():
 # user logout
 @app.route('/users/logout', methods=['POST'])
 def logout():
+    # Start Token Checking Section
     token_key = request.headers.get('Authorization')
     try:
         decoded = jwt.decode(token_key, app.config['SECRET'], algorithms=['HS256'])
     except:
-        error = {'message': "Invalid token"}
+        error = {'message': "Signature expired. Please log in again."}
         error_str = json.dumps(error)
         response = make_response(error_str, 400)
         response.headers['Content-Type'] = 'application/json'
         return response
 
     blacklisted = mongo.db.blacklisted
-    q = blacklisted.find_one({'username':decoded['sub'],'token':token_key})
+    q = blacklisted.find_one({'username': decoded['sub'], 'token': token_key})
     if q:
         error = {'message': "Invalid token"}
         error_str = json.dumps(error)
         response = make_response(error_str, 400)
         response.headers['Content-Type'] = 'application/json'
         return response
+    # End of Token Checking Section
+
 
     blacklisted.insert({'username':decoded['sub'],'token':token_key})
     return_data = {'message': 'OK'}
@@ -152,23 +393,26 @@ def logout():
 # retrieve user
 @app.route('/users/<username>',methods=['GET'])
 def get_users(username):
+    # Start Token Checking
     token_key = request.headers.get('Authorization')
     try:
         decoded = jwt.decode(token_key, app.config['SECRET'], algorithms=['HS256'])
     except:
-        error = {'message': "Authentication information is missing or invalid"}
+        error = {'message': "Signature expired. Please log in again."}
         error_str = json.dumps(error)
-        response = make_response(error_str, 401)
+        response = make_response(error_str, 400)
         response.headers['Content-Type'] = 'application/json'
         return response
+
     blacklisted = mongo.db.blacklisted
     q = blacklisted.find_one({'username': decoded['sub'], 'token': token_key})
     if q:
         error = {'message': "Authentication information is missing or invalid"}
         error_str = json.dumps(error)
-        response = make_response(error_str, 401)
+        response = make_response(error_str, 400)
         response.headers['Content-Type'] = 'application/json'
         return response
+    # End of Token Checking
 
     users = mongo.db.users
     q = users.find_one({'username':username})
