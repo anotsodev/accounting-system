@@ -443,6 +443,6 @@ def get_users(username):
 
 if __name__ == '__main__':
     # default port is 5000
-    app.run()
+    app.run(host= '0.0.0.0')
 
 
