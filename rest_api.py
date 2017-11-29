@@ -15,7 +15,7 @@ mongo = PyMongo(app)
 # CATEGORY SECTION
 @app.route('/categories',methods=['GET','POST'])
 def categories():
-    # Start Token Checking Section
+    # Start Token Checking
     token_key = request.headers.get('Authorization')
     try:
         decoded = jwt.decode(token_key, app.config['SECRET'], algorithms=['HS256'])
@@ -34,12 +34,14 @@ def categories():
         response = make_response(error_str, 400)
         response.headers['Content-Type'] = 'application/json'
         return response
-    # End of Token Checking Section
+    # End of Token Checking
 
+    # Check request method if POST to insert data to db
     if request.method == 'POST':
         if request.is_json:
             types = ['income','expense']
             data = request.get_json()
+            # Check body if valid
             if "name" not in data:
                 error = {'message': 'invalid request body'}
                 error_str = json.dumps(error)
@@ -59,6 +61,7 @@ def categories():
                 response.headers['Content-Type'] = 'application/json'
                 return response
             else:
+            # if body is valid, insert data to db
                 categories = mongo.db.categories
                 q = categories.insert(data)
                 if q:
@@ -69,12 +72,15 @@ def categories():
                     response.headers['Content-Type'] = 'application/json'
                     return response
         else:
+        # if request content-type is not json, this will return an error response
             error = {'message': 'content type error'}
             error_str = json.dumps(error)
             response = make_response(error_str, 400)
             response.headers['Content-Type'] = 'application/json'
             return response
 
+    # this will return all the categories if the method is not POST
+    # by default the method is GET
     categories = mongo.db.categories
     q = categories.find()
     data = []
@@ -89,7 +95,7 @@ def categories():
 
 @app.route('/categories/<category_id>',methods=['GET'])
 def view_category(category_id):
-    # Start Token Checking Section
+    # Start Token Checking
     token_key = request.headers.get('Authorization')
     try:
         decoded = jwt.decode(token_key, app.config['SECRET'], algorithms=['HS256'])
@@ -108,7 +114,9 @@ def view_category(category_id):
         response = make_response(error_str, 400)
         response.headers['Content-Type'] = 'application/json'
         return response
-    # End of Token Checking Section
+    # End of Token Checking
+    # This will check the category if the category id is same with the request category id
+    # this will simply search categories collection with the given category id
     categories = mongo.db.categories
     q = categories.find_one({'id':category_id})
     if q:
@@ -127,7 +135,7 @@ def view_category(category_id):
 # RECORDS SECTION
 @app.route('/records',methods=['GET','POST'])
 def records():
-    # Start Token Checking Section
+    # Start Token Checking
     token_key = request.headers.get('Authorization')
     try:
         decoded = jwt.decode(token_key, app.config['SECRET'], algorithms=['HS256'])
@@ -198,7 +206,7 @@ def records():
 
 @app.route('/records/<record_id>',methods=['GET'])
 def view_record(record_id):
-    # Start Token Checking Section
+    # Start Token Checking
     token_key = request.headers.get('Authorization')
     try:
         decoded = jwt.decode(token_key, app.config['SECRET'], algorithms=['HS256'])
@@ -217,7 +225,7 @@ def view_record(record_id):
         response = make_response(error_str, 400)
         response.headers['Content-Type'] = 'application/json'
         return response
-    # End of Token Checking Section
+    # End of Token Checking
     records = mongo.db.records
     q = records.find_one({'id':record_id})
     if q:
@@ -362,7 +370,7 @@ def login_user():
 # user logout
 @app.route('/users/logout', methods=['POST'])
 def logout():
-    # Start Token Checking Section
+    # Start Token Checking
     token_key = request.headers.get('Authorization')
     try:
         decoded = jwt.decode(token_key, app.config['SECRET'], algorithms=['HS256'])
@@ -381,7 +389,7 @@ def logout():
         response = make_response(error_str, 400)
         response.headers['Content-Type'] = 'application/json'
         return response
-    # End of Token Checking Section
+    # End of Token Checking
 
 
     blacklisted.insert({'username':decoded['sub'],'token':token_key})
