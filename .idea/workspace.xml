@@ -16,7 +16,7 @@
     <SUITE FILE_PATH="coverage/accounting_system$main.coverage" NAME="main Coverage Results" MODIFIED="1511863891218" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/accounting_system$index.coverage" NAME="index Coverage Results" MODIFIED="1511864025571" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/accounting_system$main__1_.coverage" NAME="main (1) Coverage Results" MODIFIED="1511874538531" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/accounting_system$rest_api.coverage" NAME="rest_api Coverage Results" MODIFIED="1511926170984" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/accounting_system$rest_api.coverage" NAME="rest_api Coverage Results" MODIFIED="1511927910593" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/accounting_system$accounting_system.coverage" NAME="accounting-system Coverage Results" MODIFIED="1511791550238" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
   </component>
   <component name="DatabaseView">
@@ -38,15 +38,10 @@
       <file leaf-file-name="rest_api.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/rest_api.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="204">
-              <caret line="12" column="20" lean-forward="true" selection-start-line="12" selection-start-column="20" selection-end-line="12" selection-end-column="20" />
+            <state relative-caret-position="291">
+              <caret line="327" column="17" lean-forward="true" selection-start-line="327" selection-start-column="17" selection-end-line="327" selection-end-column="17" />
               <folding>
                 <element signature="e#0#53#0" expanded="true" />
-                <element signature="e#17413#18764#0" expanded="false" />
-                <marker date="1511926577246" expanded="false" signature="5409:8591" ph="..." />
-                <marker date="1511926577246" expanded="false" signature="10216:14489" ph="..." />
-                <marker date="1511926577246" expanded="false" signature="14566:16199" ph="..." />
-                <marker date="1511926577246" expanded="false" signature="16274:17318" ph="..." />
               </folding>
             </state>
           </provider>
@@ -341,11 +336,6 @@
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#0#53#0" expanded="true" />
-            <element signature="e#17413#18764#0" expanded="false" />
-            <marker date="1511926577246" expanded="false" signature="5409:8591" ph="..." />
-            <marker date="1511926577246" expanded="false" signature="10216:14489" ph="..." />
-            <marker date="1511926577246" expanded="false" signature="14566:16199" ph="..." />
-            <marker date="1511926577246" expanded="false" signature="16274:17318" ph="..." />
           </folding>
         </state>
       </provider>
@@ -382,11 +372,6 @@
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#0#53#0" expanded="true" />
-            <element signature="e#17413#18764#0" expanded="false" />
-            <marker date="1511926577246" expanded="false" signature="5409:8591" ph="..." />
-            <marker date="1511926577246" expanded="false" signature="10216:14489" ph="..." />
-            <marker date="1511926577246" expanded="false" signature="14566:16199" ph="..." />
-            <marker date="1511926577246" expanded="false" signature="16274:17318" ph="..." />
           </folding>
         </state>
       </provider>
@@ -408,11 +393,6 @@
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#0#53#0" expanded="true" />
-            <element signature="e#17413#18764#0" expanded="false" />
-            <marker date="1511926577246" expanded="false" signature="5409:8591" ph="..." />
-            <marker date="1511926577246" expanded="false" signature="10216:14489" ph="..." />
-            <marker date="1511926577246" expanded="false" signature="14566:16199" ph="..." />
-            <marker date="1511926577246" expanded="false" signature="16274:17318" ph="..." />
           </folding>
         </state>
       </provider>
@@ -454,15 +434,10 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/rest_api.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="204">
-          <caret line="12" column="20" lean-forward="true" selection-start-line="12" selection-start-column="20" selection-end-line="12" selection-end-column="20" />
+        <state relative-caret-position="291">
+          <caret line="327" column="17" lean-forward="true" selection-start-line="327" selection-start-column="17" selection-end-line="327" selection-end-column="17" />
           <folding>
             <element signature="e#0#53#0" expanded="true" />
-            <element signature="e#17413#18764#0" expanded="false" />
-            <marker date="1511926577246" expanded="false" signature="5409:8591" ph="..." />
-            <marker date="1511926577246" expanded="false" signature="10216:14489" ph="..." />
-            <marker date="1511926577246" expanded="false" signature="14566:16199" ph="..." />
-            <marker date="1511926577246" expanded="false" signature="16274:17318" ph="..." />
           </folding>
         </state>
       </provider>

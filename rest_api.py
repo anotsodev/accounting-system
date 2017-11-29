@@ -85,13 +85,12 @@ def categories():
     q = categories.find()
     data = []
     for item in q:
-        data.append({'id':str(item['_id']),'name':item['name'], 'type':item['type']})
+        data.append({'id': item['id'],'name':item['name'], 'type':item['type']})
 
     request_data = json.dumps(data)
     response = make_response(request_data,200)
     response.headers['Content-Type'] = 'application/json'
     return request_data
-
 
 @app.route('/categories/<category_id>',methods=['GET'])
 def view_category(category_id):
@@ -327,10 +326,17 @@ def create_user():
 # user login
 @app.route('/users/login', methods=['POST'])
 def login_user():
-    basic_auth = request.headers.get("Authorization")
-    basic_auth = basic_auth.replace("Basic","")
-    basic_auth = base64.b64decode(basic_auth)
-    basic_auth = basic_auth.decode('utf-8')
+    try:
+        basic_auth = request.headers.get("Authorization")
+        basic_auth = basic_auth.replace("Basic","")
+        basic_auth = base64.b64decode(basic_auth)
+        basic_auth = basic_auth.decode('utf-8')
+    except:
+        error = {'message': "Invalid username or password"}
+        error_str = json.dumps(error)
+        response = make_response(error_str, 401)
+        response.headers['Content-Type'] = 'application/json'
+        return response
 
     if ':' not in basic_auth:
         error = {'message': "Invalid username or password"}
@@ -436,6 +442,7 @@ def get_users(username):
     return response
 
 if __name__ == '__main__':
+    # default port is 5000
     app.run()
 
 
