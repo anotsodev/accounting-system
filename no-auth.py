@@ -16,24 +16,24 @@ mongo = PyMongo(app)
 @app.route('/categories',methods=['GET','POST'])
 def categories():
     # Start Token Checking
-    token_key = request.headers.get('Authorization')
-    try:
-        decoded = jwt.decode(token_key, app.config['SECRET'], algorithms=['HS256'])
-    except:
-        error = {'message': "Invalid token."}
-        error_str = json.dumps(error)
-        response = make_response(error_str, 400)
-        response.headers['Content-Type'] = 'application/json'
-        return response
+    # token_key = request.headers.get('Authorization')
+    # try:
+    #     decoded = jwt.decode(token_key, app.config['SECRET'], algorithms=['HS256'])
+    # except:
+    #     error = {'message': "Signature expired. Please log in again."}
+    #     error_str = json.dumps(error)
+    #     response = make_response(error_str, 400)
+    #     response.headers['Content-Type'] = 'application/json'
+    #     return response
 
-    blacklisted = mongo.db.blacklisted
-    q = blacklisted.find_one({'username': decoded['sub'], 'token': token_key})
-    if q:
-        error = {'message': "Invalid token."}
-        error_str = json.dumps(error)
-        response = make_response(error_str, 400)
-        response.headers['Content-Type'] = 'application/json'
-        return response
+    # blacklisted = mongo.db.blacklisted
+    # q = blacklisted.find_one({'username': decoded['sub'], 'token': token_key})
+    # if q:
+    #     error = {'message': "Authentication information is missing or invalid"}
+    #     error_str = json.dumps(error)
+    #     response = make_response(error_str, 400)
+    #     response.headers['Content-Type'] = 'application/json'
+    #     return response
     # End of Token Checking
 
     # Check request method if POST to insert data to db
@@ -73,9 +73,9 @@ def categories():
                     return response
         else:
         # if request content-type is not json, this will return an error response
-            error = {"detail": "Invalid Content-type (application/json), expected JSON data","status": 415,"title": "Unsupported Media Type","type": "about:blank"}
+            error = {'message': 'content type error'}
             error_str = json.dumps(error)
-            response = make_response(error_str, 415)
+            response = make_response(error_str, 400)
             response.headers['Content-Type'] = 'application/json'
             return response
 
@@ -95,24 +95,24 @@ def categories():
 @app.route('/categories/<category_id>',methods=['GET'])
 def view_category(category_id):
     # Start Token Checking
-    token_key = request.headers.get('Authorization')
-    try:
-        decoded = jwt.decode(token_key, app.config['SECRET'], algorithms=['HS256'])
-    except:
-        error = {'message': "Signature expired. Please log in again."}
-        error_str = json.dumps(error)
-        response = make_response(error_str, 400)
-        response.headers['Content-Type'] = 'application/json'
-        return response
+    # token_key = request.headers.get('Authorization')
+    # try:
+    #     decoded = jwt.decode(token_key, app.config['SECRET'], algorithms=['HS256'])
+    # except:
+    #     error = {'message': "Signature expired. Please log in again."}
+    #     error_str = json.dumps(error)
+    #     response = make_response(error_str, 400)
+    #     response.headers['Content-Type'] = 'application/json'
+    #     return response
 
-    blacklisted = mongo.db.blacklisted
-    q = blacklisted.find_one({'username': decoded['sub'], 'token': token_key})
-    if q:
-        error = {'message': "Invalid token."}
-        error_str = json.dumps(error)
-        response = make_response(error_str, 400)
-        response.headers['Content-Type'] = 'application/json'
-        return response
+    # blacklisted = mongo.db.blacklisted
+    # q = blacklisted.find_one({'username': decoded['sub'], 'token': token_key})
+    # if q:
+    #     error = {'message': "Authentication information is missing or invalid"}
+    #     error_str = json.dumps(error)
+    #     response = make_response(error_str, 400)
+    #     response.headers['Content-Type'] = 'application/json'
+    #     return response
     # End of Token Checking
     # This will check the category if the category id is same with the request category id
     # this will simply search categories collection with the given category id
@@ -135,24 +135,24 @@ def view_category(category_id):
 @app.route('/records',methods=['GET','POST'])
 def records():
     # Start Token Checking
-    token_key = request.headers.get('Authorization')
-    try:
-        decoded = jwt.decode(token_key, app.config['SECRET'], algorithms=['HS256'])
-    except:
-        error = {'message': "Signature expired. Please log in again."}
-        error_str = json.dumps(error)
-        response = make_response(error_str, 400)
-        response.headers['Content-Type'] = 'application/json'
-        return response
+    # token_key = request.headers.get('Authorization')
+    # try:
+    #     decoded = jwt.decode(token_key, app.config['SECRET'], algorithms=['HS256'])
+    # except:
+    #     error = {'message': "Signature expired. Please log in again."}
+    #     error_str = json.dumps(error)
+    #     response = make_response(error_str, 400)
+    #     response.headers['Content-Type'] = 'application/json'
+    #     return response
 
-    blacklisted = mongo.db.blacklisted
-    q = blacklisted.find_one({'username': decoded['sub'], 'token': token_key})
-    if q:
-        error = {'message': "Invalid token."}
-        error_str = json.dumps(error)
-        response = make_response(error_str, 400)
-        response.headers['Content-Type'] = 'application/json'
-        return response
+    # blacklisted = mongo.db.blacklisted
+    # q = blacklisted.find_one({'username': decoded['sub'], 'token': token_key})
+    # if q:
+    #     error = {'message': "Authentication information is missing or invalid"}
+    #     error_str = json.dumps(error)
+    #     response = make_response(error_str, 400)
+    #     response.headers['Content-Type'] = 'application/json'
+    #     return response
     # end of token checking section
     if request.method == 'POST':
         if request.is_json:
@@ -186,9 +186,9 @@ def records():
                     response.headers['Content-Type'] = 'application/json'
                     return response
         else:
-            error = {"detail": "Invalid Content-type (application/json), expected JSON data","status": 415,"title": "Unsupported Media Type","type": "about:blank"}
+            error = {'message': 'content type error'}
             error_str = json.dumps(error)
-            response = make_response(error_str, 415)
+            response = make_response(error_str, 400)
             response.headers['Content-Type'] = 'application/json'
             return response
 
@@ -206,24 +206,24 @@ def records():
 @app.route('/records/<record_id>',methods=['GET'])
 def view_record(record_id):
     # Start Token Checking
-    token_key = request.headers.get('Authorization')
-    try:
-        decoded = jwt.decode(token_key, app.config['SECRET'], algorithms=['HS256'])
-    except:
-        error = {'message': "Signature expired. Please log in again."}
-        error_str = json.dumps(error)
-        response = make_response(error_str, 400)
-        response.headers['Content-Type'] = 'application/json'
-        return response
+    # token_key = request.headers.get('Authorization')
+    # try:
+    #     decoded = jwt.decode(token_key, app.config['SECRET'], algorithms=['HS256'])
+    # except:
+    #     error = {'message': "Signature expired. Please log in again."}
+    #     error_str = json.dumps(error)
+    #     response = make_response(error_str, 400)
+    #     response.headers['Content-Type'] = 'application/json'
+    #     return response
 
-    blacklisted = mongo.db.blacklisted
-    q = blacklisted.find_one({'username': decoded['sub'], 'token': token_key})
-    if q:
-        error = {'message': "Invalid token."}
-        error_str = json.dumps(error)
-        response = make_response(error_str, 400)
-        response.headers['Content-Type'] = 'application/json'
-        return response
+    # blacklisted = mongo.db.blacklisted
+    # q = blacklisted.find_one({'username': decoded['sub'], 'token': token_key})
+    # if q:
+    #     error = {'message': "Authentication information is missing or invalid"}
+    #     error_str = json.dumps(error)
+    #     response = make_response(error_str, 400)
+    #     response.headers['Content-Type'] = 'application/json'
+    #     return response
     # End of Token Checking
     records = mongo.db.records
     q = records.find_one({'id':record_id})
@@ -317,9 +317,9 @@ def create_user():
                 return response
     # return error of not a json request
     else:
-        error = {"detail": "Invalid Content-type (application/json), expected JSON data","status": 415,"title": "Unsupported Media Type","type": "about:blank"}
+        error = {'message': 'content type error'}
         error_str = json.dumps(error)
-        response = make_response(error_str, 415)
+        response = make_response(error_str, 400)
         response.headers['Content-Type'] = 'application/json'
         return response
 
@@ -390,7 +390,7 @@ def logout():
     blacklisted = mongo.db.blacklisted
     q = blacklisted.find_one({'username': decoded['sub'], 'token': token_key})
     if q:
-        error = {'message': "Invalid token."}
+        error = {'message': "Invalid token"}
         error_str = json.dumps(error)
         response = make_response(error_str, 400)
         response.headers['Content-Type'] = 'application/json'
@@ -408,24 +408,24 @@ def logout():
 @app.route('/users/<username>',methods=['GET'])
 def get_users(username):
     # Start Token Checking
-    token_key = request.headers.get('Authorization')
-    try:
-        decoded = jwt.decode(token_key, app.config['SECRET'], algorithms=['HS256'])
-    except:
-        error = {'message': "Signature expired. Please log in again."}
-        error_str = json.dumps(error)
-        response = make_response(error_str, 400)
-        response.headers['Content-Type'] = 'application/json'
-        return response
+    # token_key = request.headers.get('Authorization')
+    # try:
+    #     decoded = jwt.decode(token_key, app.config['SECRET'], algorithms=['HS256'])
+    # except:
+    #     error = {'message': "Signature expired. Please log in again."}
+    #     error_str = json.dumps(error)
+    #     response = make_response(error_str, 400)
+    #     response.headers['Content-Type'] = 'application/json'
+    #     return response
 
-    blacklisted = mongo.db.blacklisted
-    q = blacklisted.find_one({'username': decoded['sub'], 'token': token_key})
-    if q:
-        error = {'message': "Invalid token."}
-        error_str = json.dumps(error)
-        response = make_response(error_str, 400)
-        response.headers['Content-Type'] = 'application/json'
-        return response
+    # blacklisted = mongo.db.blacklisted
+    # q = blacklisted.find_one({'username': decoded['sub'], 'token': token_key})
+    # if q:
+    #     error = {'message': "Authentication information is missing or invalid"}
+    #     error_str = json.dumps(error)
+    #     response = make_response(error_str, 400)
+    #     response.headers['Content-Type'] = 'application/json'
+    #     return response
     # End of Token Checking
 
     users = mongo.db.users
