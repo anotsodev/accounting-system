@@ -44,13 +44,13 @@ def categories():
             types = ['income','expense']
             data = request.get_json()
             # Check body if valid
-            if "name" not in data:
+            if "name" not in data.keys():
                 error = {'message': 'invalid request body'}
                 error_str = json.dumps(error)
                 response = make_response(error_str, 400)
                 response.headers['Content-Type'] = 'application/json'
                 return response
-            if "type" not in data:
+            if "type" not in data.keys():
                 error = {'message': 'invalid request body'}
                 error_str = json.dumps(error)
                 response = make_response(error_str, 400)
@@ -250,44 +250,46 @@ def create_user():
     if request.is_json:
         data = request.get_json()
         # check for username key if existing
-        if "username" not in data:
-            error = {"invalid_fields": [{"field": 'username',"reason": "'username' is a required property"}]}
+        required = ['username','password','firstName','lastName','email', 'balance', 'phone']
+        incomplete = False
+        error = {"invalid_fields":[]}
+        for r in required:
+            if r not in data.keys():
+                error["invalid_fields"].append({"field": r, "reason": r + " is a required property"})
+                incomplete = True
+
+        if incomplete:
             error_str = json.dumps(error)
             response = make_response(error_str, 400)
             response.headers['Content-Type'] = 'application/json'
             return response
-        # check for password key if existing
-        elif "password" not in data:
-            error = {"invalid_fields": [{"field": 'null',"reason": "'password' is a required property"}]}
-            error_str = json.dumps(error)
-            response = make_response(error_str, 400)
-            response.headers['Content-Type'] = 'application/json'
-            return response
+
         else:
             # check password if in pattern, return 400 response error if not match, else continue
+            error = {"invalid_fields":[]}
+            incomplete = False
             password_pattern = re.compile("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[^\\w\\s]).{8,}$")
             email_pattern = re.compile("(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)")
             username_pattern = re.compile("([a-z]+[_]+[a-z]*)")
-            if not password_pattern.match(data['password']):
-                error = {"invalid_fields": [{"field": 'password', "reason": "'string' does not match '^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[^\\\\w\\\\s]).{8,}$'"}]}
-                error_str = json.dumps(error)
-                response = make_response(error_str, 400)
-                response.headers['Content-Type'] = 'application/json'
-                return response
-            if not email_pattern.match(data['email']):
-                error = {"invalid_fields": [{"field": 'email',
-                                             "reason": "'string' does not match '^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)'"}]}
-                error_str = json.dumps(error)
-                response = make_response(error_str, 400)
-                response.headers['Content-Type'] = 'application/json'
-                return response
+
             if not username_pattern.match(data['username']):
-                error = {"invalid_fields": [{"field": 'username',
-                                             "reason": "this only accepts lowercase letter and underscore, and should start with letter"}]}
+                error["invalid_fields"].append({"field": 'username',
+                                             "reason": "usernames must only have lowercase letters and underscore. Example: john_doe"})
+                incomplete = True
+            if not password_pattern.match(data['password']):
+                error["invalid_fields"].append({"field": 'password', "reason": "password does not match '^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[^\\\\w\\\\s]).{8,}$'"})
+                incomplete = True
+            if not email_pattern.match(data['email']):
+                error["invalid_fields"].append({"field": 'email',
+                                             "reason": "email does not match '^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)'"})
+                incomplete = True
+
+            if incomplete:
                 error_str = json.dumps(error)
                 response = make_response(error_str, 400)
                 response.headers['Content-Type'] = 'application/json'
                 return response
+
         # Insert database section
         # Encrypt password
         hashed_password = sha256_crypt.hash(data['password'])

@@ -4,8 +4,7 @@ $( document ).ready(function() {
       var url = "http://10.5.92.201:5000"
 
       var data = JSON.stringify($('form').serializeObject())
-
-      console.log(data)
+      var response = {};
 
       var settings = {
             "async": true,
@@ -23,7 +22,7 @@ $( document ).ready(function() {
                 window.location.href = '/login';
             },
             error: function (request, message, error) {
-              console.log(message)
+              handler_error(request.responseText);
             }
           }
             $.ajax(settings);
@@ -32,6 +31,29 @@ $( document ).ready(function() {
 });
 
 
+function handler_error(error_message){
+  $( "#error-message" ).html(function(){
+    var ret = "<p>Please check the following fields:</p>"
+    error_data = JSON.parse(error_message);
+    $.each(error_data["invalid_fields"],function(i, val){
+        $.each(val,function(key,val){
+          if (key == "field") {
+              ret += "<b>";
+              ret += (val);
+              ret += "</b>";
+          }else {
+            ret += "<p>";
+            ret += (val);
+            ret += "</p>";
+          }
+          
+        })
+    });
+    return ret
+  });
+  
+
+}
 
 $.fn.serializeObject = function()
 {
