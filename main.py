@@ -37,6 +37,7 @@ def dashboard():
 
 @app.route('/features')
 def feature():
+    
     return render_template('features.html')
 
 @app.route('/login')
