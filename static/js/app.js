@@ -66,6 +66,21 @@ $( document ).ready(function() {
             $.ajax(settings);
     }); 
 
+    // Logout
+    $( "#logout-account" ).click(function() {
+      var settings = {
+            "async": true,
+            "crossDomain": true,
+            "url": url+"/users/logout",
+            "method": "POST",
+            "headers": {
+              "accept": "application/json",
+              "authorization": sessionStorage.getItem('token_key')
+            }
+          }
+            $.ajax(settings);
+    }); 
+
 });
 
 function encode_base64(string) {
