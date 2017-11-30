@@ -1,9 +1,6 @@
-required = ['key3','key4','key5']
-d = {'key1':'asd','key2':'asd'}
-error = {"invalid_fields":[]}
+import jwt
+import uuid
+token_key = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1MTIwMjgwNzIsImlhdCI6MTUxMjAyNzQ3Miwic3ViIjoia3lsZV9oYWxvZyJ9.01kfhYCVIuIDbPlld4lTTkxpQq-8eAr0vRN_7nGM3F4"
+# print(jwt.decode(token_key, 'secret', algorithms=['HS256'])['sub'])
 
-for key in d.keys():
-    if key not in required:
-        error["invalid_fields"].append({"field": key,"reason": key+" is a required property"})
-
-print (error)
+print(uuid.uuid1())

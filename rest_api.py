@@ -6,6 +6,7 @@ import jwt
 import datetime
 import base64
 import re
+import uuid
 
 app = Flask(__name__)
 CORS(app)
@@ -64,11 +65,13 @@ def categories():
                 return response
             else:
             # if body is valid, insert data to db
-                categories = mongo.db.categories
-                q = categories.insert(data)
+                accounts = mongo.db.accounts
+                unique_id = uuid.uuid1()
+                data.update({'id':str(unique_id)})
+                username = decoded['sub']
+                q = accounts.update({"username" : username},{"$addToSet": {"categories":data}})
                 if q:
-                    categories.update({'_id': q}, {'id': str(q), 'name': data['name'], 'type': data['type']})
-                    return_data = {"id":str(q),"name":data['name'],"type":data['type']}
+                    return_data = {"id":unique_id,"name":data['name'],"type":data['type']}
                     return_data_str = json.dumps(return_data)
                     response = make_response(return_data_str,200)
                     response.headers['Content-Type'] = 'application/json'
@@ -83,13 +86,10 @@ def categories():
 
     # this will return all the categories if the method is not POST
     # by default the method is GET
-    categories = mongo.db.categories
-    q = categories.find()
-    data = []
-    for item in q:
-        data.append({'id': item['id'],'name':item['name'], 'type':item['type']})
-
-    request_data = json.dumps(data)
+    accounts = mongo.db.accounts
+    username = decoded['sub']
+    q = accounts.find_one({'username':username})
+    request_data = json.dumps(q['categories'])
     response = make_response(request_data,200)
     response.headers['Content-Type'] = 'application/json'
     return request_data
@@ -118,15 +118,18 @@ def view_category(category_id):
     # End of Token Checking
     # This will check the category if the category id is same with the request category id
     # this will simply search categories collection with the given category id
-    categories = mongo.db.categories
-    q = categories.find_one({'id':category_id})
-    if q:
-        request_data = {'id':q['id'],'name':q['name'],'type':q['type']}
-        request_data_str = json.dumps(request_data)
-        response = make_response(request_data_str,200)
-        response.headers['Content-Type'] = 'application/json'
+    accounts = mongo.db.accounts
+    username = decoded['sub']
+    q = accounts.find_one({'username':username})
+    for s in q['categories']:
+        if s['id'] == category_id:
+            request_data = s
+            request_data_str = json.dumps(request_data)
+            response = make_response(request_data_str, 200)
+            response.headers['Content-Type'] = 'application/json'
 
-        return response
+            return response
+
     error = {'message': 'category not found'}
     error_str = json.dumps(error)
     response = make_response(error_str, 404)
@@ -138,6 +141,7 @@ def view_category(category_id):
 def records():
     # Start Token Checking
     token_key = request.headers.get('Authorization')
+    username = ""
     try:
         decoded = jwt.decode(token_key, app.config['SECRET'], algorithms=['HS256'])
     except:
@@ -178,13 +182,27 @@ def records():
                 response.headers['Content-Type'] = 'application/json'
                 return response
             else:
-                records = mongo.db.records
-                q = records.insert(data)
-                if q:
-                    records.update({'_id': q}, {'id': str(q), 'amount': data['amount'], 'category_id': data['category_id'],'description':data['description']})
-                    return_data = {'id': str(q), 'amount': data['amount'], 'category_id': data['category_id'],'description':data['description']}
+                accounts = mongo.db.accounts
+                username = decoded['sub']
+                unique_id = uuid.uuid1()
+                data.update({'id': str(unique_id)})
+
+                q = accounts.find_one({'username':username})
+                all_categories = [x['id'] for x in q['categories']]
+
+                if data['category_id'] in all_categories:
+                    q = accounts.update({"username": username}, {"$addToSet": {"records": data}})
+                    return_data = {'id': unique_id, 'amount': data['amount'], 'category_id': data['category_id'],
+                                   'description': data['description']}
+
                     return_data_str = json.dumps(return_data)
-                    response = make_response(return_data_str,200)
+                    response = make_response(return_data_str, 200)
+                    response.headers['Content-Type'] = 'application/json'
+                    return response
+                else:
+                    error = {'message': 'category not found'}
+                    error_str = json.dumps(error)
+                    response = make_response(error_str, 404)
                     response.headers['Content-Type'] = 'application/json'
                     return response
         else:
@@ -194,13 +212,10 @@ def records():
             response.headers['Content-Type'] = 'application/json'
             return response
 
-    records = mongo.db.records
-    q = records.find()
-    data = []
-    for item in q:
-        data.append({'id': item['id'],'amount': item['amount'], 'category_id': item['category_id'],'description':item['description']})
-
-    request_data = json.dumps(data)
+    accounts = mongo.db.accounts
+    username = decoded['sub']
+    q = accounts.find_one({'username': username})
+    request_data = json.dumps(q['records'])
     response = make_response(request_data,200)
     response.headers['Content-Type'] = 'application/json'
     return request_data
@@ -227,14 +242,23 @@ def view_record(record_id):
         response.headers['Content-Type'] = 'application/json'
         return response
     # End of Token Checking
-    records = mongo.db.records
-    q = records.find_one({'id':record_id})
-    if q:
-        request_data = {'id':q['id'],'amount':q['amount'],'category_id':q['category_id'],'description':q['description']}
-        request_data_str = json.dumps(request_data)
-        response = make_response(request_data_str,200)
-        response.headers['Content-Type'] = 'application/json'
-        return response
+    accounts = mongo.db.accounts
+    username = decoded['sub']
+    q = accounts.find_one({'username':username})
+    for s in q['records']:
+        if s['id'] == record_id:
+            request_data = s
+            request_data_str = json.dumps(request_data)
+            response = make_response(request_data_str, 200)
+            response.headers['Content-Type'] = 'application/json'
+
+            return response
+    # if q:
+    #     request_data = {'id':q['id'],'amount':q['amount'],'category_id':q['category_id'],'description':q['description']}
+    #     request_data_str = json.dumps(request_data)
+    #     response = make_response(request_data_str,200)
+    #     response.headers['Content-Type'] = 'application/json'
+    #     return response
     error = {'message': 'record not found'}
     error_str = json.dumps(error)
     response = make_response(error_str, 404)
@@ -296,8 +320,8 @@ def create_user():
         data['password'] = hashed_password
 
         # check for existing user
-        users = mongo.db.users
-        q = users.find_one({'username':data['username']})
+        accounts = mongo.db.accounts
+        q = accounts.find_one({'username':data['username']})
         if q:
             error = {"invalid_fields": [{"field": 'username',
                                          "reason": "User "+data['username']+" already existed"}]}
@@ -306,7 +330,8 @@ def create_user():
             response.headers['Content-Type'] = 'application/json'
             return response
         else:
-            if mongo.db.users.insert(data):
+            data.update({'categories':[],'records':[]})
+            if mongo.db.accounts.insert(data):
                 # Return response
                 return_data = {"balance": data['balance'],"email": data['email'],"phone": data['phone'],"username": data['username']}
                 return_data_str = json.dumps(return_data)
@@ -349,10 +374,10 @@ def login_user():
         response.headers['Content-Type'] = 'application/json'
         return response
 
-    users = mongo.db.users
+    accounts = mongo.db.accounts
     username = basic_auth.split(':')[0]
     password = basic_auth.split(':')[1]
-    q = users.find_one({'username':username})
+    q = accounts.find_one({'username':username})
     if q:
         if sha256_crypt.verify(password,q['password']):
             # make token
