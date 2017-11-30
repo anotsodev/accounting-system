@@ -1862,7 +1862,7 @@ section.forms .line {
 }
 
 .login-page .form-holder .info {
-  background: rgba(121, 106, 238, 0.9);
+  background: #FFC43B;
   color: #fff;
 }
 
@@ -2090,8 +2090,8 @@ STYLE SWITCHER FOR DEMO
 
 .btn-primary {
   color: #fff;
-  background-color: #796AEE;
-  border-color: #796AEE;
+  background-color: #FFC43B;
+  border-color: #FFC43B;
 }
 
 .btn-primary:hover {
