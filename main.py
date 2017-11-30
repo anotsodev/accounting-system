@@ -46,8 +46,20 @@ def login():
 
 @app.route('/logout')
 def logout():
-
     return render_template('login.html')
+
+@app.route('/addrecord')
+def addrecord():
+    pass
+
+@app.route('/addcategory')
+def addcategory():
+    return render_template('addcategory.html')
+
+@app.route('/viewtransactionhistory')
+def viewtransactionhistory():
+    pass
+
 
 if __name__ == '__main__':
     app.run(port=8080)

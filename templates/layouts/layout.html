@@ -13,6 +13,8 @@
     <!-- Google fonts - Poppins -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,700">
     <!-- theme stylesheet-->
+    <!-- Font Awesome CSS-->
+    <link rel="stylesheet" href="{{ url_for('static', filename='login-register/vendor/font-awesome/css/font-awesome.min.css') }}">
       <!-- MAIN CSS -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
     <!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/style.default.css') }}" id="theme-stylesheet"> -->
@@ -52,7 +54,7 @@
       <div class="sidebar-scroll">
         <nav>
           <ul class="nav">
-            <li><a href="/" class="active"><i class="lnr lnr-home"></i> <span>Dashboard</span></a></li>
+            <li>{% block nav_link %}{% endblock %}</li>
           </ul>
         </nav>
       </div>
@@ -76,8 +78,8 @@
   </div>
   <!-- END WRAPPER -->
   <!-- Javascript -->
-  <script src="{{ url_for('static', filename='js/session-check.js') }}" async=""></script>
-  <script src="{{ url_for('static', filename='vendor/jquery/jquery.min.js') }}"> </script>
+  <script src="{{ url_for('static', filename='js/session-check.js') }}"></script>
+  <!-- <script src="{{ url_for('static', filename='vendor/jquery/jquery.min.js') }}"> </script> -->
   <script src="{{ url_for('static', filename='vendor/popper.js/umd/popper.min.js') }}"> </script>
   <script src="{{ url_for('static', filename='vendor/bootstrap/js/bootstrap.min.js') }}"></script>
   <script src="{{ url_for('static', filename='vendor/jquery.cookie/jquery.cookie.js') }}"> </script>

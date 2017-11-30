@@ -48,7 +48,7 @@
               <div class="form d-flex align-items-center">
                 <div class="content">
                 <div id="error-message"></div>
-                  <form id="login-form" method="post">
+                  <form id="login-form">
                     <div class="form-group">
                       <input id="login-username" type="text" name="username" required="" class="input-material">
                       <label for="login-username" class="label-material">User Name</label>
@@ -58,7 +58,6 @@
                       <label for="login-password" class="label-material">Password</label>
                     </div>
                     <button id="login" type="button" class="btn btn-primary">Login</button>
-                    <!-- This should be submit button but I replaced it with <a> for demo purposes-->
                   </form>
                   <small>Do not have an account? </small><a href="/register" class="signup">Create new account</a>
                 </div>
@@ -69,6 +68,11 @@
       </div>
     </div>
 <!-- Javascript files-->
+    <script type="text/javascript">
+      if(sessionStorage.getItem('username') && sessionStorage.getItem('token_key')){
+            window.location.href = '/dashboard';
+      }
+    </script>
     <script src="{{ url_for('static', filename='login-register/vendor/popper.js/umd/popper.min.js') }}"> </script>
     <script src="{{ url_for('static', filename='login-register/vendor/bootstrap/js/bootstrap.min.js') }}"></script>
     <script src="{{ url_for('static', filename='login-register/vendor/jquery.cookie/jquery.cookie.js') }}"> </script>

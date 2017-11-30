@@ -1,13 +1,12 @@
 $( document ).ready(function() {
   var url = "http://10.5.92.201:5000"
   // check session
-  
     /*
       Register Section
     */ 
     $( "#register" ).click(function() {
 
-      var data = JSON.stringify($('form').serializeObject())
+      var data = JSON.stringify($('form').serializeObject());
       var response = {};
 
       var settings = {
@@ -36,9 +35,9 @@ $( document ).ready(function() {
     */
     // Login Section
     $( "#login" ).click(function() {
-      var data = JSON.stringify($('form').serializeObject())
+      var data = JSON.stringify($('form').serializeObject());
       var response = {};
-      var auth = 
+      var auth
       parsed_data = JSON.parse(data)
       var credential = parsed_data['username']+":"+parsed_data['password'];
       auth = encode_base64(credential)
@@ -79,7 +78,33 @@ $( document ).ready(function() {
             }
           }
             $.ajax(settings);
+      sessionStorage.clear();
     }); 
+
+    // Add new category
+    $( "#add-new-category" ).click(function() {
+      var data = JSON.stringify($('form').serializeObject());
+      var settings = {
+        "async": true,
+        "crossDomain": true,
+        "url": url+"/categories",
+        "method": "POST",
+        "headers": {
+          "accept": "application/json",
+          "content-type": "application/json",
+          "authorization": sessionStorage.getItem('token_key'),
+          "cache-control": "no-cache"
+          },
+          "data": data,
+          success: function (response) {
+                  window.location.href = '/dashboard';
+            },
+          error: function (request, message, error) {
+                error_message_handler(request.responseText);
+              }
+          }
+      $.ajax(settings);
+    });
 
 });
 
@@ -120,8 +145,7 @@ function fields_error_handler(error_message){
 
 }
 
-$.fn.serializeObject = function()
-{
+$.fn.serializeObject = function() {
     var o = {};
     var a = this.serializeArray();
     $.each(a, function() {

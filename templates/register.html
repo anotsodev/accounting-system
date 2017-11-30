@@ -89,6 +89,11 @@
       </div>
     </div>
     <!-- Javascript files-->
+    <script type="text/javascript">
+      if(sessionStorage.getItem('username') && sessionStorage.getItem('token_key')){
+            window.location.href = '/dashboard';
+      }
+    </script>
     <script src="{{ url_for('static', filename='login-register/vendor/popper.js/umd/popper.min.js') }}"> </script>
     <script src="{{ url_for('static', filename='login-register/vendor/bootstrap/js/bootstrap.min.js') }}"></script>
     <script src="{{ url_for('static', filename='login-register/vendor/jquery.cookie/jquery.cookie.js') }}"> </script>
