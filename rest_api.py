@@ -457,8 +457,8 @@ def get_users(username):
         return response
     # End of Token Checking
 
-    users = mongo.db.users
-    q = users.find_one({'username':username})
+    accounts = mongo.db.accounts
+    q = accounts.find_one({'username':username})
     if q:
         request_data = {"balance": q['balance'],"email": q['email'],"firstName": q['firstName'],"lastName": q['lastName'],"phone": q['phone'],"username": q['username']}
         request_data = json.dumps(request_data)
