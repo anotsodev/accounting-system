@@ -1,9 +1,11 @@
 $( document ).ready(function() {
+  var url = "http://10.5.92.201:5000"
+  // check session
+  
     /*
       Register Section
     */ 
     $( "#register" ).click(function() {
-      var url = "http://10.5.92.201:5000"
 
       var data = JSON.stringify($('form').serializeObject())
       var response = {};
@@ -20,7 +22,7 @@ $( document ).ready(function() {
             },
             "dataType": "json",
             "data": data,
-            success: function (data) {
+            success: function () {
                 window.location.href = '/login';
             },
             error: function (request, message, error) {
@@ -30,10 +32,10 @@ $( document ).ready(function() {
             $.ajax(settings);
     });
     /*
-      Register Section
+      Register Section End
     */
+    // Login Section
     $( "#login" ).click(function() {
-      var url = "http://10.5.92.201:5000"
       var data = JSON.stringify($('form').serializeObject())
       var response = {};
       var auth = 
@@ -52,7 +54,9 @@ $( document ).ready(function() {
               "authorization": auth
             },
             "dataType": "json",
-            success: function () {
+            success: function (response) {
+                sessionStorage.setItem('token_key', response['token']);
+                sessionStorage.setItem('username', parsed_data['username'])
                 window.location.href = '/dashboard';
             },
             error: function (request, message, error) {
@@ -74,7 +78,7 @@ function encode_base64(string) {
 }
 
 function error_message_handler(error_message){
-  $( "#error-message" ).html(JSON.parse(error_message)['message'])
+  $( "#error-message" ).html(JSON.parse(error_message)['message']);
 }
 
 function fields_error_handler(error_message){
