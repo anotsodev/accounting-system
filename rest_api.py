@@ -1,12 +1,14 @@
 from flask import Flask, request, make_response, json
 from passlib.hash import sha256_crypt
 from flask_pymongo import PyMongo
+from flask_cors import CORS
 import jwt
 import datetime
 import base64
 import re
 
 app = Flask(__name__)
+CORS(app)
 
 app.config['MONGO_DBNAME'] = 'accounting-system'
 app.config['SECRET'] = 'secret' # change this
