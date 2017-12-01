@@ -1,6 +1,6 @@
-import jwt
-import uuid
-token_key = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1MTIwMjgwNzIsImlhdCI6MTUxMjAyNzQ3Miwic3ViIjoia3lsZV9oYWxvZyJ9.01kfhYCVIuIDbPlld4lTTkxpQq-8eAr0vRN_7nGM3F4"
-# print(jwt.decode(token_key, 'secret', algorithms=['HS256'])['sub'])
+from flask import Flask, request, make_response, json
+from passlib.hash import sha256_crypt
+from flask_pymongo import PyMongo
+from flask_cors import CORS
 
-print(uuid.uuid1())
+app = Flask(__name__)

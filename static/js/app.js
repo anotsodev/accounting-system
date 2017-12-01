@@ -106,7 +106,77 @@ $( document ).ready(function() {
       $.ajax(settings);
     });
 
+      // get categories
+        var settings = {
+          "async": true,
+          "crossDomain": true,
+          "url": url+"/categories",
+          "method": "GET",
+          "headers": {
+            "authorization": sessionStorage.getItem('token_key'),
+            "cache-control": "no-cache",
+          },
+          success: function (response) {
+                       output_cat(response);
+                       dropdown_cat(response)
+                  }
+            }
+
+        $.ajax(settings);
+
+      // get recent records
+          var settings = {
+            "async": true,
+            "crossDomain": true,
+            "url": url+"/records",
+            "method": "GET",
+            "headers": {
+              "authorization": sessionStorage.getItem('token_key'),
+              "cache-control": "no-cache",
+            },
+            success: function (response) {
+                         output_recent_records(response,url);
+                         output_all_records(response, url);
+                    }
+              }
+
+          $.ajax(settings);
+      // get user balance
+        var settings = {
+          "async": true,
+          "crossDomain": true,
+          "url": url+"/users/"+sessionStorage.getItem('username'),
+          "method": "GET",
+          "headers": {
+            "accept": "application/json",
+            "authorization": sessionStorage.getItem('token_key'),
+            "cache-control": "no-cache"
+          },
+          success: function (response) {
+            output_balance(response);
+          }
+        }
+
+        $.ajax(settings);
+// end
 });
+
+// functions
+$.fn.serializeObject = function() {
+    var o = {};
+    var a = this.serializeArray();
+    $.each(a, function() {
+        if (o[this.name] !== undefined) {
+            if (!o[this.name].push) {
+                o[this.name] = [o[this.name]];
+            }
+            o[this.name].push(this.value || '');
+        } else {
+            o[this.name] = this.value || '';
+        }
+    });
+    return o;
+};
 
 function encode_base64(string) {
   // Create Base64 Object
@@ -118,7 +188,7 @@ function encode_base64(string) {
 }
 
 function error_message_handler(error_message){
-  $( "#error-message" ).html(JSON.parse(error_message)['message']);
+  $( "#error-message" ).html("<b>"+JSON.parse(error_message)['message']+"</b>");
 }
 
 function fields_error_handler(error_message){
@@ -145,19 +215,121 @@ function fields_error_handler(error_message){
 
 }
 
-$.fn.serializeObject = function() {
-    var o = {};
-    var a = this.serializeArray();
-    $.each(a, function() {
-        if (o[this.name] !== undefined) {
-            if (!o[this.name].push) {
-                o[this.name] = [o[this.name]];
-            }
-            o[this.name].push(this.value || '');
-        } else {
-            o[this.name] = this.value || '';
+function output_cat(response){
+  var income_body = "";
+  var expense_body = "";
+  var income_trans_count = 0;
+  var expense_trans_count = 0;
+  var response_text = JSON.parse(response);
+  $.each(response_text, function(i, val){
+    income_body += "<tr>";
+    expense_body += "<tr>";
+    if(val['type'] == 'income'){
+      income_body += ("<td>"+val['name']+"</td>");
+      income_body += ("<td>0 Transactions</td>");
+      income_body += ("<td><button type='button' class='btn btn-danger' disabled>Delete</button></td>");
+    }else{
+      expense_body += ("<td>"+val['name']+"</td>");
+      expense_body += ("<td>0 Transactions</td>");
+      expense_body += ("<td><button type='button' class='btn btn-danger' disabled>Delete</button></td>");
+    }
+    income_body += "</tr>";
+    expense_body += "</tr>";
+  }); 
+  $( "#income-table" ).html(income_body);
+  $( "#expense-table" ).html(expense_body);
+
+}
+function dropdown_cat(response){
+    var out = "";
+
+    var response_text = JSON.parse(response);
+    $.each(response_text, function(i, val){
+      out += "<option value="+val['id']+">";
+      out += val['name']
+      out += "</option>";
+    }); 
+    $( "#category-picker" ).html(out);
+
+}
+
+function output_balance(response) {
+  var response_text = JSON.parse(response);
+  $( "#user-balance" ).html('<h4 class="card-title">PHP '+parseFloat(response_text['balance'])+'</h4>');
+}
+
+function get_category_name(response, val){
+    records_rows += "<tr>";
+    records_rows += ("<td>"+response['name']+"</td>");
+    records_rows += ("<td>"+val['description']+"</td>");
+    records_rows += ("<td>"+val['amount']+"</td>");
+    records_rows += ("<td>"+response['type']+"</td>");
+    records_rows += "</tr>";
+
+    $( "#records-rows" ).html(records_rows);
+}
+
+function output_recent_records(response,url){
+   var response_text = JSON.parse(response);
+   records_rows = "";
+   var count = 0;
+   $.each(response_text, function(i, val){
+
+      var settings = {
+          "async": true,
+          "crossDomain": true,
+          "url": url+"/categories/"+val['category_id'],
+          "method": "GET",
+          "headers": {
+            "accept": "application/json",
+            "authorization": sessionStorage.getItem('token_key'),
+            "cache-control": "no-cache"
+          },
+          success: function (response) {
+            get_category_name(response, val)
+          },
         }
-    });
-    return o;
-};
+        $.ajax(settings);
+      count += 1;
+      if(count == 5){
+        return false;
+      }
+   });
+   
+}
+
+function output_all_records(response, url){
+  var response_text = JSON.parse(response);
+   records_rows_a = "";
+   $.each(response_text, function(i, val){
+
+      var settings = {
+          "async": true,
+          "crossDomain": true,
+          "url": url+"/categories/"+val['category_id'],
+          "method": "GET",
+          "headers": {
+            "accept": "application/json",
+            "authorization": sessionStorage.getItem('token_key'),
+            "cache-control": "no-cache"
+          },
+          success: function (response) {
+            get_category_name_a(response, val)
+          },
+        }
+        $.ajax(settings);
+   });
+}
+
+function get_category_name_a(response, val){
+    records_rows_a += "<tr>";
+    records_rows_a += ("<td>"+response['name']+"</td>");
+    records_rows_a += ("<td>"+val['description']+"</td>");
+    records_rows_a += ("<td>"+val['amount']+"</td>");
+    records_rows_a += ("<td>"+response['type']+"</td>");
+    records_rows_a += "</tr>";
+
+    $( "#records-rows-all" ).html(records_rows_a);
+}
+
 

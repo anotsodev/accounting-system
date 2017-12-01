@@ -66,6 +66,15 @@ def categories():
             else:
             # if body is valid, insert data to db
                 accounts = mongo.db.accounts
+                q = accounts.find_one({'categories.name':data['name'],'category.type':data['type']})
+                print(data['name'])
+                if q:
+                    error = {'message': data['name']+" is already in the categories"}
+                    error_str = json.dumps(error)
+                    response = make_response(error_str, 400)
+                    response.headers['Content-Type'] = 'application/json'
+                    return response
+
                 unique_id = uuid.uuid1()
                 data.update({'id':str(unique_id)})
                 username = decoded['sub']
@@ -186,8 +195,19 @@ def records():
                 username = decoded['sub']
                 unique_id = uuid.uuid1()
                 data.update({'id': str(unique_id)})
-
+                type = ""
                 q = accounts.find_one({'username':username})
+                for y in q['categories']:
+                    if y['id'] == data['category_id']:
+                        type = y['type']
+
+                if type == "income":
+                    accounts.update({"username" :username},{"$inc" : {'balance':float(data['amount'])}})
+                if type == "expense":
+                    q_bal = accounts.find_one({'username':username})
+                    balance = float(q_bal['balance'] - data['amount'])
+                    accounts.update({"username": username}, {"$set": {'balance': balance}})
+
                 all_categories = [x['id'] for x in q['categories']]
 
                 if data['category_id'] in all_categories:
@@ -318,7 +338,10 @@ def create_user():
                 error["invalid_fields"].append({"field": 'email',
                                              "reason": "email does not match '^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)'"})
                 incomplete = True
-
+            if data['balance'] == "":
+                data['balance'] = 0.0
+            else:
+                data['balance'] = float(data['balance'])
             if incomplete:
                 error_str = json.dumps(error)
                 response = make_response(error_str, 400)

@@ -34,7 +34,7 @@
 	        	<div class="col-md-7">
 	        		<div class="input-group" id="inputAmount">
 					  <span class="input-group-addon">PHP</span>
-					  <input type="text" class="form-control" aria-label="Amount (to the nearest dollar)">
+					  <input type="text" class="form-control" aria-label="Amount">
 					  <span class="input-group-addon">.00</span>
 					</div>
 		        </div>
@@ -57,13 +57,21 @@
 	        <h3 class="modal-title" id="add-transaction-label"><i class="fa fa-money" style="color: green;"></i> Add Transaction</h3>
 	      </div>
 			<div class="modal-body">
-				<p>Type</p>
 				<form>
+					<p>Category</p>
 					<select id="category-picker" class="form-control">
 
 					</select>
 					<br>
-					<input name="name" type="text" class="form-control" placeholder="Category Name">
+					<p>Amount</p>
+					<div class="input-group" id="inputAmount">
+						<span class="input-group-addon">PHP</span>
+						<input type="number" class="form-control" aria-label="Amount" name="amount">
+						<span class="input-group-addon">.00</span>
+					</div>
+					<br>
+					<p>Description</p>
+					<input name="description" type="text" class="form-control" placeholder="Description">
 				</form>
 			</div>
 	      <div class="modal-footer">
@@ -100,46 +108,11 @@
 												<th>Category</th>
 												<th>Record</th>
 												<th>Amount</th>
-												<th>Date</th>
-												<th>Status</th>
+												<th>Type</th>
 											</tr>
 										</thead>
-										<tbody>
-											<tr>
-												<td><a href="#">Salary</a></td>
-												<td>13th Month Pay</td>
-												<td>$25000</td>
-												<td>Oct 21, 2016</td>
-												<td><span class="label label-success">INCOME</span></td>
-											</tr>
-											<tr>
-												<td><a href="#">Food &amp Drink</a></td>
-												<td>Burger Steak w/ Shake</td>
-												<td>$68</td>
-												<td>Oct 21, 2016</td>
-												<td><span class="label label-danger">EXPENSE</span></td>
-											</tr>
-											<tr>
-												<td><a href="#">Extra Income</a></td>
-												<td>Sold a House &amp Lot</td>
-												<td>$30000</td>
-												<td>Nov 03, 2016</td>
-												<td><span class="label label-success">INCOME</span></td>
-											</tr>
-											<tr>
-												<td><a href="#">Salary</a></td>
-												<td>14th Month Pay</td>
-												<td>$30000</td>
-												<td>Nov 21, 2016</td>
-												<td><span class="label label-success">INCOME</span></td>
-											</tr>
-											<tr>
-												<td><a href="#">Entertainment</a></td>
-												<td>Bought an LED TV</td>
-												<td>$34000</td>
-												<td>Nov 23, 2016</td>
-												<td><span class="label label-danger">EXPENSE</span></td>
-											</tr>
+										<tbody id="records-rows">
+											
 										</tbody>
 									</table>
 								</div>
@@ -162,8 +135,8 @@
 										<div class="card-header">
 											Cash
 										</div>
-										<div class="card-block">
-											<h4 class="card-title">$126,000</h4>
+										<div id="user-balance" class="card-block">
+											
 										</div>
 									</div>
 								</div>
