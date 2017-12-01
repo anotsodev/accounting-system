@@ -50,15 +50,7 @@
     </nav>
     <!-- END NAVBAR -->
     <!-- LEFT SIDEBAR -->
-    <div id="sidebar-nav" class="sidebar">
-      <div class="sidebar-scroll">
-        <nav>
-          <ul class="nav">
-            <li>{% block nav_link %}{% endblock %}</li>
-          </ul>
-        </nav>
-      </div>
-    </div>
+    {% block sidebar %}{% endblock %}
     <!-- END LEFT SIDEBAR -->
     <!-- MAIN -->
     <div class="main">

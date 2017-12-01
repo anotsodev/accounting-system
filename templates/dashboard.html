@@ -1,147 +1,245 @@
 {% extends 'layouts/layout.html' %}
 {% block title %}Home{% endblock title %}
+{% block sidebar %}
+<div id="sidebar-nav" class="sidebar">
+	<div class="sidebar-scroll">
+		<nav>
+			<ul class="nav">
+				<li><a href="/dashboard" class="active"><i class="fa fa-user-circle-o"></i> <span>My Account</span></a></li>
+				<li><a href="/categorylist" class=""><i class="fa fa-tasks"></i> <span>Categories</span></a></li>
+				<li><a href="/transactionhistory" class=""><i class="fa fa-handshake-o"></i> <span>Transactions</span></a></li>
+			</ul>
+		</nav>
+	</div>
+</div>
+{% endblock %}
 {% block page_header %}Dashboard{% endblock %}
-{% block nav_link %}<a href="/dashboard" class="active"><i class="lnr lnr-home"></i> <span>Dashboard</span></a>{% endblock %}
 {% block content %}
 <div class="container-fluid">
 	<!-- Button trigger modal -->
-	<!-- Modal -->
-	<div class="modal fade" id="add-category" tabindex="-1" role="dialog" aria-labelledby="modal-label" aria-hidden="true">
-		<div class="modal-dialog" role="document">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title" id="exampleModalLabel">Add New Category</h5>
-					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-					</button>
-				</div>
-				
-					<div class="modal-body">
-						<p>Type</p>
-						<form>
-							<label class="fancy-radio">
-								<input name="type" value="income" type="radio">
-								<span><i></i>Income</span>
-							</label>
-							<label class="fancy-radio">
-								<input name="type" value="expense" type="radio">
-								<span><i></i>Expense</span>
-							</label>
-							<br>
-							<input name="name" type="text" class="form-control" placeholder="Category Name">
-						</form>
+
+	<!-- MODAL DEPOSIT -->
+	<div class="modal fade" id="deposit-money" tabindex="-1" role="dialog" aria-labelledby="deposit-money-label" aria-hidden="true">
+	  <div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h3 class="modal-title" id="deposit-money-label"><i class="fa fa-money" style="color: green;"></i> Deposit Money</h3>
+	      </div>
+	      <div class="modal-body">
+	        <div class="row">
+	        	<div class="col-md-1"></div>
+	        	<div class="col-md-3">
+	        		<h4>Total Amount:</h4>
+	        	</div>
+	        	<div class="col-md-7">
+	        		<div class="input-group" id="inputAmount">
+					  <span class="input-group-addon">PHP</span>
+					  <input type="text" class="form-control" aria-label="Amount (to the nearest dollar)">
+					  <span class="input-group-addon">.00</span>
 					</div>
-					<div class="modal-footer">
-						<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-						<button id="add-new-category" type="button" class="btn btn-primary">Save changes</button>
-					</div>
-				
-			</div>
-		</div>
+		        </div>
+		        <div class="col-md-1"></div>
+	        </div>
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-times" aria-hidden="true"></i>&nbspClose</button>
+	        <button type="button" class="btn btn-success"><i class="fa fa-check" aria-hidden="true"></i>&nbspDeposit</button>
+	      </div>
+	    </div>
+	  </div>
 	</div>
+	<!-- MODAL END -->
+	<!-- MODAL DEPOSIT -->
+	<div class="modal fade" id="add-transaction" tabindex="-1" role="dialog" aria-labelledby="add-transaction-label" aria-hidden="true">
+	  <div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h3 class="modal-title" id="add-transaction-label"><i class="fa fa-money" style="color: green;"></i> Add Transaction</h3>
+	      </div>
+			<div class="modal-body">
+				<p>Type</p>
+				<form>
+					<select id="category-picker" class="form-control">
+
+					</select>
+					<br>
+					<input name="name" type="text" class="form-control" placeholder="Category Name">
+				</form>
+			</div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-times" aria-hidden="true"></i>&nbspClose</button>
+	        <button type="button" class="btn btn-success"><i class="fa fa-check" aria-hidden="true"></i>&nbspSave Changes</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+	<!-- MODAL END -->
 	<!-- OVERVIEW -->
 	<div class="panel panel-headline">
 		<div class="panel-heading">
 			<h3 class="panel-title">Moneyger Accounting System</h3>
-			<!-- <p class="panel-subtitle">Period: Oct 14, 2016 - Oct 21, 2016</p> -->
 		</div>
 		<div class="panel-body">
+			<div class="col-md-6">
+				<button class="btn btn-success" data-toggle="modal" data-target="#add-transaction"><i class="fa fa-plus-circle"></i> Add Transaction</button>
+			</div>
 			<div class="row">
 				<div class="col-md-12">
-					<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#add-category">
-	<i class="fa fa-plus"></i> Add Category
-	</button>
-					<button class="btn btn-success"><i class="fa fa-plus"></i> Add Record</button>
-					
-					<div class="col-md-3"></div>
-					<a href="/viewtransactionhistory" class="btn btn-primary"><i class="fa fa-list"></i> View All Transactions</a>
-					
-				</div>
-			</div>
-			</br>
-			<div class="row">
-				<div class="col-md-3">
-					<div class="weekly-summary text-right">
-						<span class="number">2,315</span> <span class="percentage"><i class="fa fa-caret-up text-success"></i> </span>
-						<span class="info-label">Wallet Balance</span>
-					</div>
-					<div class="weekly-summary text-right">
-						<span class="number">$5,758</span> <span class="percentage"><i class="fa fa-caret-up text-success"></i> </span>
-						<span class="info-label">Total Income</span>
-					</div>
-					<div class="weekly-summary text-right">
-						<span class="number">$65,938</span> <span class="percentage"><i class="fa fa-caret-down text-danger"></i> </span>
-						<span class="info-label">Total Expense</span>
-					</div>
-				</div>
-				<div class="col-md-9">
-					<!-- RECENT PURCHASES -->
-					<div class="panel">
-						<div class="panel-heading">
-							<h3 class="panel-title">Recent Transaction</h3>
+					<!-- MULTI CHARTS -->
+					<div class="row">
+						<div class="col-md-9">
+							<!-- RECENT PURCHASES -->
+							<div class="panel">
+								<div class="panel-heading">
+									<h3 class="panel-title">Recent Transactions</h3>
+								</div>
+								<div class="panel-body no-padding">
+									<table class="table table-striped">
+										<thead>
+											<tr>
+												<th>Category</th>
+												<th>Record</th>
+												<th>Amount</th>
+												<th>Date</th>
+												<th>Status</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<td><a href="#">Salary</a></td>
+												<td>13th Month Pay</td>
+												<td>$25000</td>
+												<td>Oct 21, 2016</td>
+												<td><span class="label label-success">INCOME</span></td>
+											</tr>
+											<tr>
+												<td><a href="#">Food &amp Drink</a></td>
+												<td>Burger Steak w/ Shake</td>
+												<td>$68</td>
+												<td>Oct 21, 2016</td>
+												<td><span class="label label-danger">EXPENSE</span></td>
+											</tr>
+											<tr>
+												<td><a href="#">Extra Income</a></td>
+												<td>Sold a House &amp Lot</td>
+												<td>$30000</td>
+												<td>Nov 03, 2016</td>
+												<td><span class="label label-success">INCOME</span></td>
+											</tr>
+											<tr>
+												<td><a href="#">Salary</a></td>
+												<td>14th Month Pay</td>
+												<td>$30000</td>
+												<td>Nov 21, 2016</td>
+												<td><span class="label label-success">INCOME</span></td>
+											</tr>
+											<tr>
+												<td><a href="#">Entertainment</a></td>
+												<td>Bought an LED TV</td>
+												<td>$34000</td>
+												<td>Nov 23, 2016</td>
+												<td><span class="label label-danger">EXPENSE</span></td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+								<div class="panel-footer">
+									<div class="row">
+										<div class="col-md-3"><span class="panel-note"><i class="fa fa-clock-o"></i> Last 24 hours</span></div>
+										<div class="col-md-9 text-right"><a href="/transactionhistory" class="btn btn-primary"><i class="fa fa-list-ol" aria-hidden="true"></i>&nbsp List All</a></div>
+									</div>
+								</div>
+							</div>
+							<!-- END RECENT PURCHASES -->
 						</div>
-						<div class="panel-body no-padding">
-							<table class="table table-striped">
-								<thead>
-									<tr>
-										<th>Order No.</th>
-										<th>Name</th>
-										<th>Amount</th>
-										<th>Date &amp; Time</th>
-										<th>Status</th>
-									</tr>
-								</thead>
-								<tbody>
-									<tr>
-										<td><a href="#">763648</a></td>
-										<td>Steve</td>
-										<td>$122</td>
-										<td>Oct 21, 2016</td>
-										<td><span class="label label-success">COMPLETED</span></td>
-									</tr>
-									<tr>
-										<td><a href="#">763649</a></td>
-										<td>Amber</td>
-										<td>$62</td>
-										<td>Oct 21, 2016</td>
-										<td><span class="label label-warning">PENDING</span></td>
-									</tr>
-									<tr>
-										<td><a href="#">763650</a></td>
-										<td>Michael</td>
-										<td>$34</td>
-										<td>Oct 18, 2016</td>
-										<td><span class="label label-danger">FAILED</span></td>
-									</tr>
-									<tr>
-										<td><a href="#">763651</a></td>
-										<td>Roger</td>
-										<td>$186</td>
-										<td>Oct 17, 2016</td>
-										<td><span class="label label-success">SUCCESS</span></td>
-									</tr>
-									<tr>
-										<td><a href="#">763652</a></td>
-										<td>Smith</td>
-										<td>$362</td>
-										<td>Oct 16, 2016</td>
-										<td><span class="label label-success">SUCCESS</span></td>
-									</tr>
-								</tbody>
-							</table>
-						</div>
-						<div class="panel-footer">
-							<div class="row">
-								<div class="col-md-6"><span class="panel-note"><i class="fa fa-clock-o"></i> Last 24 hours</span></div>
-								<div class="col-md-6 text-right"><a href="#" class="btn btn-primary">View All Transactions</a></div>
+						<div class="col-md-3">
+							<div class="panel">
+								<div class="panel-heading">
+									<span class="title" style="font-weight: 30px;">Your Total Balance is:</span>
+								</div>
+								<div class="panel-body">
+									<div class="card">
+										<div class="card-header">
+											Cash
+										</div>
+										<div class="card-block">
+											<h4 class="card-title">$126,000</h4>
+										</div>
+									</div>
+								</div>
+								<div class="panel-footer" style="padding-top: 0px; padding-bottom: 0px">
+									<div class="row">
+										<div class="col-md-6"></div>
+										<div class="col-md-6">
+											<div class="navbar-btn navbar-btn-right">
+												<a type="button" class="btn btn-success btn-md update-pro" data-toggle="modal" data-target="#deposit-money" title="Upgrade to Pro" target="_blank"><i class="fa fa-money"></i><span>&nbsp Deposit Money</span></a>
+											</div>
+										</div>
+									</div>
+								</div>
 							</div>
 						</div>
 					</div>
-					<!-- END RECENT PURCHASES -->
+					<!-- END MULTI CHARTS -->
 				</div>
 			</div>
 		</div>
 	</div>
-	<!-- END OVERVIEW -->
+
+			<!-- END MULTI CHARTS -->
+	<div class="row">
+				<div class="col-md-12">
+					<!-- TODO LIST -->
+					<div class="panel">
+						<div class="panel-heading">
+							<h3 class="panel-title">To-Do List</h3>
+						</div>
+						<div class="panel-body">
+							<ul class="list-unstyled todo-list">
+								<li>
+									<label class="control-inline fancy-checkbox">
+										<input type="checkbox"><span></span>
+									</label>
+									<p>
+										<span class="title">Need Mag-ipon</span>
+										<span class="short-description">Dynamically integrate client-centric technologies without cooperative resources.</span>
+										<span class="date">Oct 9, 2016</span>
+									</p>
+									<div class="controls">
+										<a href="#"><i class="icon-software icon-software-pencil"></i></a> <a href="#"><i class="icon-arrows icon-arrows-circle-remove"></i></a>
+									</div>
+								</li>
+								<li>
+									<label class="control-inline fancy-checkbox">
+										<input type="checkbox"><span></span>
+									</label>
+									<p>
+										<span class="title">Say No! to Gastos</span>
+										<span class="short-description">Compellingly implement clicks-and-mortar relationships without highly efficient metrics.</span>
+										<span class="date">Oct 11, 2016</span>
+									</p>
+									<div class="controls">
+										<a href="#"><i class="icon-software icon-software-pencil"></i></a> <a href="#"><i class="icon-arrows icon-arrows-circle-remove"></i></a>
+									</div>
+								</li>
+								<li>
+									<label class="control-inline fancy-checkbox">
+										<input type="checkbox"><span></span>
+									</label>
+									<p>
+										<span class="title">Gala no More</span>
+										<span class="short-description">Monotonectally formulate client-focused core competencies after parallel web-readiness.</span>
+										<span class="date">Oct 23, 2016</span>
+									</p>
+									<div class="controls">
+										<a href="#"><i class="icon-software icon-software-pencil"></i></a> <a href="#"><i class="icon-arrows icon-arrows-circle-remove"></i></a>
+									</div>
+								</li>
+							</ul>
+						</div>
+					</div>
+					<!-- END TODO LIST -->
+				</div>
+	</div>
 </div>
 {% endblock %}

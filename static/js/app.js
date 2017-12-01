@@ -55,7 +55,7 @@ $( document ).ready(function() {
             "dataType": "json",
             success: function (response) {
                 sessionStorage.setItem('token_key', response['token']);
-                sessionStorage.setItem('username', parsed_data['username'])
+                sessionStorage.setItem('username', parsed_data['username']);
                 window.location.href = '/dashboard';
             },
             error: function (request, message, error) {
@@ -97,7 +97,7 @@ $( document ).ready(function() {
           },
           "data": data,
           success: function (response) {
-                  window.location.href = '/dashboard';
+                  window.location.href = '/categorylist';
             },
           error: function (request, message, error) {
                 error_message_handler(request.responseText);

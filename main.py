@@ -48,17 +48,13 @@ def login():
 def logout():
     return render_template('login.html')
 
-@app.route('/addrecord')
-def addrecord():
-    pass
+@app.route('/categorylist')
+def categorylist():
+    return render_template('categorylist.html')
 
-@app.route('/addcategory')
-def addcategory():
-    return render_template('addcategory.html')
-
-@app.route('/viewtransactionhistory')
+@app.route('/transactionhistory')
 def viewtransactionhistory():
-    pass
+    return render_template('transactionhistory.html')
 
 
 if __name__ == '__main__':

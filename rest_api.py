@@ -212,6 +212,7 @@ def records():
             response.headers['Content-Type'] = 'application/json'
             return response
 
+
     accounts = mongo.db.accounts
     username = decoded['sub']
     q = accounts.find_one({'username': username})
@@ -220,7 +221,7 @@ def records():
     response.headers['Content-Type'] = 'application/json'
     return request_data
 
-@app.route('/records/<record_id>',methods=['GET'])
+@app.route('/records/<record_id>',methods=['GET','DELETE'])
 def view_record(record_id):
     # Start Token Checking
     token_key = request.headers.get('Authorization')
@@ -242,6 +243,22 @@ def view_record(record_id):
         response.headers['Content-Type'] = 'application/json'
         return response
     # End of Token Checking
+    if request.method == 'DELETE':
+        accounts = mongo.db.accounts
+        username = decoded['sub']
+        q = accounts.find_one({'username': username})
+        for s in q['records']:
+            if s['id'] == record_id:
+                request_data = s
+                request_data_str = json.dumps(request_data)
+                response = make_response(request_data_str, 200)
+
+                accounts.update({'username': username},
+                                {"$pull": {"records": {"id": record_id}}}, False, True)
+
+                response.headers['Content-Type'] = 'application/json'
+
+                return response
     accounts = mongo.db.accounts
     username = decoded['sub']
     q = accounts.find_one({'username':username})
@@ -253,12 +270,6 @@ def view_record(record_id):
             response.headers['Content-Type'] = 'application/json'
 
             return response
-    # if q:
-    #     request_data = {'id':q['id'],'amount':q['amount'],'category_id':q['category_id'],'description':q['description']}
-    #     request_data_str = json.dumps(request_data)
-    #     response = make_response(request_data_str,200)
-    #     response.headers['Content-Type'] = 'application/json'
-    #     return response
     error = {'message': 'record not found'}
     error_str = json.dumps(error)
     response = make_response(error_str, 404)
