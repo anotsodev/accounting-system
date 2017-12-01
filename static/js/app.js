@@ -302,6 +302,7 @@ function output_balance(response) {
 
 function get_category_name(response, val){
     records_rows += "<tr>";
+    records_rows += ("<td>"+val['date']+"</td>");
     records_rows += ("<td>"+response['name']+"</td>");
     records_rows += ("<td>"+val['description']+"</td>");
     records_rows += ("<td>"+val['amount']+"</td>");
@@ -333,7 +334,7 @@ function output_recent_records(response,url){
         }
         $.ajax(settings);
       count += 1;
-      if(count == 5){
+      if(count == 10){
         return false;
       }
    });
@@ -365,6 +366,7 @@ function output_all_records(response, url){
 
 function get_category_name_a(response, val){
     records_rows_a += "<tr>";
+    records_rows_a += ("<td>"+val['date']+"</td>");
     records_rows_a += ("<td>"+response['name']+"</td>");
     records_rows_a += ("<td>"+val['description']+"</td>");
     records_rows_a += ("<td>"+val['amount']+"</td>");

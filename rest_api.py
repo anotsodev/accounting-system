@@ -212,13 +212,21 @@ def records():
                         return response
 
                 if type == "expense":
-                    q_bal = accounts.find_one({'username':username})
-                    balance = float(q_bal['balance'] - int(data['amount']))
-                    accounts.update({"username": username}, {"$set": {'balance': balance}})
+                    try:
+                        q_bal = accounts.find_one({'username':username})
+                        balance = float(q_bal['balance'] - int(data['amount']))
+                        accounts.update({"username": username}, {"$set": {'balance': balance}})
+                    except:
+                        error = {'message': 'invalid amount input'}
+                        error_str = json.dumps(error)
+                        response = make_response(error_str, 404)
+                        response.headers['Content-Type'] = 'application/json'
+                        return response
 
                 all_categories = [x['id'] for x in q['categories']]
 
                 if data['category_id'] in all_categories:
+                    data.update({'date':datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")})
                     q = accounts.update({"username": username}, {"$addToSet": {"records": data}})
                     return_data = {'id': unique_id, 'amount': data['amount'], 'category_id': data['category_id'],
                                    'description': data['description']}
@@ -244,7 +252,11 @@ def records():
     accounts = mongo.db.accounts
     username = decoded['sub']
     q = accounts.find_one({'username': username})
-    request_data = json.dumps(q['records'])
+    # request_data = json.dumps(q['records'])
+    # print(request_data)
+    sorted_obj = dict(q)
+    sorted_obj['records'] = sorted(q['records'], key=lambda x : x['date'], reverse=True)
+    request_data = json.dumps(sorted_obj['records'])
     response = make_response(request_data,200)
     response.headers['Content-Type'] = 'application/json'
     return request_data
