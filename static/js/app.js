@@ -305,8 +305,13 @@ function get_category_name(response, val){
     records_rows += ("<td>"+val['date']+"</td>");
     records_rows += ("<td>"+response['name']+"</td>");
     records_rows += ("<td>"+val['description']+"</td>");
-    records_rows += ("<td>"+val['amount']+"</td>");
-    records_rows += ("<td>"+response['type']+"</td>");
+    if(response['type'] == 'expense'){
+      records_rows += ("<td><span style='color: red;'>-"+val['amount']+"</span></td>");
+      records_rows += ("<td><span class='label label-danger'>"+response['type']+"</span></td>");
+    }else{
+      records_rows += ("<td><span style='color: green;'>+"+val['amount']+"</span></td>");
+      records_rows += ("<td><span class='label label-success'>"+response['type']+"</span></td>");
+    }
     records_rows += "</tr>";
 
     $( "#records-rows" ).html(records_rows);
@@ -369,8 +374,13 @@ function get_category_name_a(response, val){
     records_rows_a += ("<td>"+val['date']+"</td>");
     records_rows_a += ("<td>"+response['name']+"</td>");
     records_rows_a += ("<td>"+val['description']+"</td>");
-    records_rows_a += ("<td>"+val['amount']+"</td>");
-    records_rows_a += ("<td>"+response['type']+"</td>");
+    if(response['type'] == 'expense'){
+      records_rows_a += ("<td><span style='color: red;'>-"+val['amount']+"</span></td>");
+      records_rows_a += ("<td><span class='label label-danger'>"+response['type']+"</span></td>");
+    }else{
+      records_rows_a += ("<td><span style='color: green;'>+"+val['amount']+"</span></td>");
+      records_rows_a += ("<td><span class='label label-success'>"+response['type']+"</span></td>");
+    }
     records_rows_a += "</tr>";
 
     $( "#records-rows-all" ).html(records_rows_a);
