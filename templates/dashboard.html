@@ -55,18 +55,18 @@
 	    <div class="modal-content">
 	      <div class="modal-header">
 	        <h3 class="modal-title" id="add-transaction-label"><i class="fa fa-money" style="color: green;"></i> Add Transaction</h3>
+	        <div id="error-message"></div>
 	      </div>
 			<div class="modal-body">
 				<form>
 					<p>Category</p>
-					<select id="category-picker" class="form-control">
-
+					<select id="category-picker" class="form-control" name="category_id">
 					</select>
 					<br>
 					<p>Amount</p>
 					<div class="input-group" id="inputAmount">
 						<span class="input-group-addon">PHP</span>
-						<input type="number" class="form-control" aria-label="Amount" name="amount">
+						<input type="number" class="form-control" aria-label="Amount" name="amount" min="0">
 						<span class="input-group-addon">.00</span>
 					</div>
 					<br>
@@ -76,7 +76,7 @@
 			</div>
 	      <div class="modal-footer">
 	        <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-times" aria-hidden="true"></i>&nbspClose</button>
-	        <button type="button" class="btn btn-success"><i class="fa fa-check" aria-hidden="true"></i>&nbspSave Changes</button>
+	        <button id="add-new-trans" type="button" class="btn btn-success"><i class="fa fa-check" aria-hidden="true"></i>&nbspSave Changes</button>
 	      </div>
 	    </div>
 	  </div>

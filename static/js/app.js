@@ -158,6 +158,33 @@ $( document ).ready(function() {
         }
 
         $.ajax(settings);
+
+        $( "#add-new-trans" ).click(function() {
+          var data = JSON.stringify($('form').serializeObject());
+          var settings = {
+            "async": true,
+            "crossDomain": true,
+            "url": url+"/records",
+            "method": "POST",
+            "headers": {
+              "accept": "application/json",
+              "content-type": "application/json",
+              "authorization": sessionStorage.getItem('token_key'),
+              "cache-control": "no-cache",
+              "postman-token": "e42a1802-8648-9ec6-d1f2-4fd0acb9cf1f"
+            },
+            "processData": false,
+            "data": data,
+            success: function (response) {
+               window.location.href = '/dashboard';
+            },
+            error: function (request, message, error) {
+                error_message_handler(request.responseText);
+              }
+          }
+
+            $.ajax(settings);
+        }); 
 // end
 });
 
@@ -244,11 +271,26 @@ function dropdown_cat(response){
     var out = "";
 
     var response_text = JSON.parse(response);
+    out += "<option value='' selected>Choose Category</option>";
+    out += "<optgroup label='Income'>";
     $.each(response_text, function(i, val){
-      out += "<option value="+val['id']+">";
-      out += val['name']
-      out += "</option>";
+      if(val['type'] == 'income'){
+        out += "<option value="+val['id']+">";
+        out += val['name']
+        out += "</option>";
+      }
     }); 
+    out += "</optgroup>";
+
+    out += "<optgroup label='Expense'>";
+    $.each(response_text, function(i, val){
+      if(val['type'] == 'expense'){
+        out += "<option value="+val['id']+">";
+        out += val['name']
+        out += "</option>";
+      }
+    }); 
+    out += "</optgroup>";
     $( "#category-picker" ).html(out);
 
 }
@@ -276,7 +318,7 @@ function output_recent_records(response,url){
    $.each(response_text, function(i, val){
 
       var settings = {
-          "async": true,
+          "async": false,
           "crossDomain": true,
           "url": url+"/categories/"+val['category_id'],
           "method": "GET",
@@ -304,7 +346,7 @@ function output_all_records(response, url){
    $.each(response_text, function(i, val){
 
       var settings = {
-          "async": true,
+          "async": false,
           "crossDomain": true,
           "url": url+"/categories/"+val['category_id'],
           "method": "GET",

@@ -202,10 +202,18 @@ def records():
                         type = y['type']
 
                 if type == "income":
-                    accounts.update({"username" :username},{"$inc" : {'balance':float(data['amount'])}})
+                    try:
+                        accounts.update({"username" :username},{"$inc" : {'balance':float(data['amount'])}})
+                    except:
+                        error = {'message': 'invalid amount input'}
+                        error_str = json.dumps(error)
+                        response = make_response(error_str, 404)
+                        response.headers['Content-Type'] = 'application/json'
+                        return response
+
                 if type == "expense":
                     q_bal = accounts.find_one({'username':username})
-                    balance = float(q_bal['balance'] - data['amount'])
+                    balance = float(q_bal['balance'] - int(data['amount']))
                     accounts.update({"username": username}, {"$set": {'balance': balance}})
 
                 all_categories = [x['id'] for x in q['categories']]
