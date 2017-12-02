@@ -17,7 +17,40 @@
 {% block content %}
 <div class="container-fluid">
 	<!-- Button trigger modal -->
-
+	<div class="modal fade" id="add-category" tabindex="-1" role="dialog" aria-labelledby="modal-label" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">Add New Category</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+					</button>
+					<div id="error-message-add-new-category"></div>
+				</div>
+					
+					<div class="modal-body">
+						<p>Type</p>
+						<form>
+							<label class="fancy-radio">
+								<input name="type" value="income" type="radio">
+								<span><i></i>Income</span>
+							</label>
+							<label class="fancy-radio">
+								<input name="type" value="expense" type="radio">
+								<span><i></i>Expense</span>
+							</label>
+							<br>
+							<input name="name" type="text" class="form-control" placeholder="Category Name">
+						</form>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+						<button id="add-new-category" type="button" class="btn btn-primary">Save changes</button>
+					</div>
+				
+			</div>
+		</div>
+	</div>
 	<!-- MODAL DEPOSIT -->
 	<div class="modal fade" id="deposit-money" tabindex="-1" role="dialog" aria-labelledby="deposit-money-label" aria-hidden="true">
 	  <div class="modal-dialog" role="document">
@@ -55,7 +88,7 @@
 	    <div class="modal-content">
 	      <div class="modal-header">
 	        <h3 class="modal-title" id="add-transaction-label"><i class="fa fa-money" style="color: green;"></i> Add Transaction</h3>
-	        <div id="error-message"></div>
+	        <div id="error-message-add-new-trans"></div>
 	      </div>
 			<div class="modal-body">
 				<form>
@@ -88,7 +121,10 @@
 			<h3 class="panel-title">Moneyger Accounting System</h3>
 		</div>
 		<div class="panel-body">
-			<div class="col-md-6">
+			<div class="col-md-9">
+				<button type="button" class="btn btn-success" data-toggle="modal" data-target="#add-category">
+				<i class="fa fa-plus-circle"></i> Add New Category
+				</button>
 				<button class="btn btn-success" data-toggle="modal" data-target="#add-transaction"><i class="fa fa-plus-circle"></i> Add Transaction</button>
 			</div>
 			<div class="row">

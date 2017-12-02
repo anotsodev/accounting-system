@@ -59,7 +59,7 @@ $( document ).ready(function() {
                 window.location.href = '/dashboard';
             },
             error: function (request, message, error) {
-              error_message_handler(request.responseText);
+              error_message_handler(request.responseText,"login");
             }
           }
             $.ajax(settings);
@@ -100,7 +100,7 @@ $( document ).ready(function() {
                   window.location.href = '/categorylist';
             },
           error: function (request, message, error) {
-                error_message_handler(request.responseText);
+                error_message_handler(request.responseText,"add-new-category");
               }
           }
       $.ajax(settings);
@@ -126,7 +126,7 @@ $( document ).ready(function() {
 
       // get recent records
           var settings = {
-            "async": true,
+            "async": false,
             "crossDomain": true,
             "url": url+"/records",
             "method": "GET",
@@ -158,7 +158,7 @@ $( document ).ready(function() {
         }
 
         $.ajax(settings);
-
+        // add new record
         $( "#add-new-trans" ).click(function() {
           var data = JSON.stringify($('form').serializeObject());
           var settings = {
@@ -170,8 +170,7 @@ $( document ).ready(function() {
               "accept": "application/json",
               "content-type": "application/json",
               "authorization": sessionStorage.getItem('token_key'),
-              "cache-control": "no-cache",
-              "postman-token": "e42a1802-8648-9ec6-d1f2-4fd0acb9cf1f"
+              "cache-control": "no-cache"
             },
             "processData": false,
             "data": data,
@@ -179,7 +178,7 @@ $( document ).ready(function() {
                window.location.href = '/dashboard';
             },
             error: function (request, message, error) {
-                error_message_handler(request.responseText);
+                error_message_handler(request.responseText,"add-new-trans");
               }
           }
 
@@ -214,8 +213,9 @@ function encode_base64(string) {
       return encodedString
 }
 
-function error_message_handler(error_message){
-  $( "#error-message" ).html("<b>"+JSON.parse(error_message)['message']+"</b>");
+function error_message_handler(error_message,id){
+  $( "#error-message"+"-"+id ).html("<b>"+JSON.parse(error_message)['message']+"</b>");
+  console.log("#error-message"+"-"+id);
 }
 
 function fields_error_handler(error_message){
@@ -318,13 +318,13 @@ function get_category_name(response, val){
 }
 
 function output_recent_records(response,url){
-   var response_text = JSON.parse(response);
+   var response_text = response;
    records_rows = "";
    var count = 0;
    $.each(response_text, function(i, val){
 
       var settings = {
-          "async": false,
+          "async": true,
           "crossDomain": true,
           "url": url+"/categories/"+val['category_id'],
           "method": "GET",
@@ -347,12 +347,12 @@ function output_recent_records(response,url){
 }
 
 function output_all_records(response, url){
-  var response_text = JSON.parse(response);
+  var response_text = response;
    records_rows_a = "";
    $.each(response_text, function(i, val){
 
       var settings = {
-          "async": false,
+          "async": true,
           "crossDomain": true,
           "url": url+"/categories/"+val['category_id'],
           "method": "GET",

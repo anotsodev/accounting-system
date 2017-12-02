@@ -42,23 +42,23 @@ def categories():
     # Check request method if POST to insert data to db
     if request.method == 'POST':
         if request.is_json:
-            types = ['income','expense']
             data = request.get_json()
-            # Check body if valid
-            if "name" not in data.keys():
-                error = {'message': 'invalid request body'}
-                error_str = json.dumps(error)
-                response = make_response(error_str, 400)
-                response.headers['Content-Type'] = 'application/json'
-                return response
-            if "type" not in data.keys():
-                error = {'message': 'invalid request body'}
+            types = ['income','expense']
+            required = ['name', 'type']
+            incomplete = False
+            error = {"invalid_fields": []}
+
+            for r in required:
+                if r not in data.keys():
+                    error["invalid_fields"].append({"field": r, "reason": r + " is a required property"})
+                    incomplete = True
+            if incomplete:
                 error_str = json.dumps(error)
                 response = make_response(error_str, 400)
                 response.headers['Content-Type'] = 'application/json'
                 return response
             if data['type'] not in types:
-                error = {"invalid_fields": [{"field": "type","reason": data['type']+" is not one of "+str(types)}]}
+                error["invalid_fields"].append({"field": "type","reason": data['type']+" is not one of "+str(types)})
                 error_str = json.dumps(error)
                 response = make_response(error_str,400)
                 response.headers['Content-Type'] = 'application/json'
@@ -67,7 +67,13 @@ def categories():
             # if body is valid, insert data to db
                 accounts = mongo.db.accounts
                 q = accounts.find_one({'categories.name':data['name'],'category.type':data['type']})
-                print(data['name'])
+                pattern = re.compile("([A-Za-z])\w+")
+                if not pattern.match(data['name']):
+                    error = {'message': "please enter valid category name"}
+                    error_str = json.dumps(error)
+                    response = make_response(error_str, 400)
+                    response.headers['Content-Type'] = 'application/json'
+                    return response
                 if q:
                     error = {'message': data['name']+" is already in the categories"}
                     error_str = json.dumps(error)
@@ -201,6 +207,12 @@ def records():
                     if y['id'] == data['category_id']:
                         type = y['type']
 
+                if int(data['amount']) < 1:
+                    error = {'message': 'invalid amount input'}
+                    error_str = json.dumps(error)
+                    response = make_response(error_str, 400)
+                    response.headers['Content-Type'] = 'application/json'
+                    return response
                 if type == "income":
                     try:
                         accounts.update({"username" :username},{"$inc" : {'balance':float(data['amount'])}})
@@ -252,14 +264,12 @@ def records():
     accounts = mongo.db.accounts
     username = decoded['sub']
     q = accounts.find_one({'username': username})
-    # request_data = json.dumps(q['records'])
-    # print(request_data)
     sorted_obj = dict(q)
     sorted_obj['records'] = sorted(q['records'], key=lambda x : x['date'], reverse=True)
     request_data = json.dumps(sorted_obj['records'])
-    response = make_response(request_data,200)
+    response = make_response(request_data, 200)
     response.headers['Content-Type'] = 'application/json'
-    return request_data
+    return response
 
 @app.route('/records/<record_id>',methods=['GET','DELETE'])
 def view_record(record_id):
@@ -357,6 +367,10 @@ def create_user():
             if not email_pattern.match(data['email']):
                 error["invalid_fields"].append({"field": 'email',
                                              "reason": "email does not match '^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)'"})
+                incomplete = True
+            if data['password'] != data['confirm_password']:
+                error["invalid_fields"].append({"field": 'password',
+                                                "reason": "passwords does not match"})
                 incomplete = True
             if data['balance'] == "":
                 data['balance'] = 0.0
