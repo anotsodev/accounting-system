@@ -490,6 +490,11 @@ def login_user():
 
             except Exception as e:
                 return e
+    error = {'message': "Invalid username or password"}
+    error_str = json.dumps(error)
+    response = make_response(error_str, 401)
+    response.headers['Content-Type'] = 'application/json'
+    return response
 
 # user logout
 @app.route('/users/logout', methods=['POST'])
