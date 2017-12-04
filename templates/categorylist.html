@@ -5,7 +5,7 @@
 	<div class="sidebar-scroll">
 		<nav>
 			<ul class="nav">
-				<li><a href="/dashboard" class=""><i class="fa fa-user-circle-o"></i> <span>My Account</span></a></li>
+				<li><a href="/dashboard" ><i class="fa fa-user-circle-o"></i> <span>My Account</span></a></li>
 				<li><a href="/categorylist" class="active"><i class="fa fa-tasks"></i> <span>Categories</span></a></li>
 				<li><a href="/transactionhistory" class=""><i class="fa fa-handshake-o"></i> <span>Transactions</span></a></li>
 			</ul>
@@ -105,6 +105,6 @@
 	</div>
 </div>
 <script src="{{ url_for('static', filename='js/list-categories.js') }}"></script>
-<script src="{{ url_for('static', filename='js/session-check.js') }}"></script>
+<script src="{{ url_for('static', filename='js/session-check.js') }}" async=""></script>
 <script src="{{ url_for('static', filename='js/add-new-cat-page.js') }}"></script>
 {% endblock %}

@@ -5,7 +5,7 @@
 	<div class="sidebar-scroll">
 		<nav>
 			<ul class="nav">
-				<li><a href="/dashboard" class=""><i class="fa fa-user-circle-o"></i> <span>My Account</span></a></li>
+				<li><a href="/dashboard"><i class="fa fa-user-circle-o"></i> <span>My Account</span></a></li>
 				<li><a href="/categorylist" class=""><i class="fa fa-tasks"></i> <span>Categories</span></a></li>
 				<li><a href="/transactionhistory" class="active"><i class="fa fa-handshake-o"></i> <span>Transactions</span></a></li>
 			</ul>
@@ -27,9 +27,10 @@
 						<tr>
 							<th>Date</th>
 							<th>Category</th>
-							<th>Record</th>
+							<th>Description</th>
 							<th>Amount</th>
 							<th>Type</th>
+							<th>Action</th>
 						</tr>
 					</thead>
 					<tbody id="records-rows-all">
@@ -46,5 +47,7 @@
 	</div>
 </div>
 <script src="{{ url_for('static', filename='js/get-records.js') }}"></script>
-<script src="{{ url_for('static', filename='js/session-check.js') }}"></script>
+<script src="{{ url_for('static', filename='js/session-check.js') }}" async=""></script>
+
+<script src="{{ url_for('static', filename='vendor/toastr/toastr.min.js') }}"></script>
 {% endblock %}

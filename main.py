@@ -42,6 +42,10 @@ def categorylist():
 def viewtransactionhistory():
     return render_template('transactionhistory.html')
 
+@app.route('/managerecords')
+def managerecords():
+    return render_template('manage-records.html')
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0',port=8080)

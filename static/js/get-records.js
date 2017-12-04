@@ -1,5 +1,6 @@
+var url = "http://localhost:5000";
 $( document ).ready(function(){
-	var url = "http://localhost:5000";
+
 	var settings = {
 	    "async": true,
 	    "crossDomain": true,
@@ -51,7 +52,27 @@ function get_cat_name(response, val){
       records_rows_a += ("<td><span style='color: green;'>+"+val['amount']+"</span></td>");
       records_rows_a += ("<td><span class='label label-success'>"+response['type']+"</span></td>");
     }
+    records_rows_a += ("<td><button type='button' class='btn btn-danger btn-sm btn-toastr' data-context='success' data-message='Deleted successfully' data-position='top-right' onclick='delete_record("+ '"'+val['id']+'"' +")'>Remove Record</button>");
     records_rows_a += "</tr>";
 
     $( "#records-rows-all" ).html(records_rows_a);
 }
+
+// function delete_record(rid) {
+//   var settings = {
+//     "async": true,
+//     "crossDomain": true,
+//     "url": url+"/records/"+rid,
+//     "method": "DELETE",
+//     "headers": {
+//       "accept": "application/json",
+//       "authorization": sessionStorage.getItem('token_key'),
+//       "cache-control": "no-cache",
+//     },
+//     success: function(){
+//       window.location.href = '/transactionhistory';
+//     }
+//   }
+
+//   $.ajax(settings);
+// }

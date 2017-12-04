@@ -17,12 +17,13 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='login-register/vendor/font-awesome/css/font-awesome.min.css') }}">
       <!-- MAIN CSS -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
-    <!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/style.default.css') }}" id="theme-stylesheet"> -->
+    
+    <link rel="stylesheet" href="{{ url_for('static', filename='vendor/toastr/toastr.min.css') }}">
     <!-- Favicon-->
     <link rel="shortcut icon" href="favicon.png">
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700" rel="stylesheet">
-    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-    <!-- <script src="{{ url_for('static', filename='js/app.js') }}"></script> -->
+    <script src="{{ url_for('static', filename='vendor/jquery/jquery.min.js') }}"></script>
+    
   </head>
 <body>
   <!-- WRAPPER -->
@@ -30,7 +31,7 @@
     <!-- NAVBAR -->
     <nav class="navbar navbar-default navbar-fixed-top">
       <div class="brand">
-        <a href="index.html"><img src="{{ url_for('static', filename='img/logo-dark.png') }}" alt="Klorofil Logo" class="img-responsive logo"></a>
+        <a href="/dashboard"><img src="{{ url_for('static', filename='img/logo-dark.png') }}" alt="Klorofil Logo" class="img-responsive logo"></a>
       </div>
       <div class="container-fluid">
         <div class="navbar-btn">
@@ -101,8 +102,8 @@
   <script src="{{ url_for('static', filename='vendor/bootstrap/js/bootstrap.min.js') }}"></script>
   <script src="{{ url_for('static', filename='vendor/jquery.cookie/jquery.cookie.js') }}"> </script>
   <script src="{{ url_for('static', filename='vendor/jquery-validation/jquery.validate.min.js') }}"></script>
-  <!-- <script src="{{ url_for('static', filename='vendor/jquery-slimscroll/jquery.slimscroll.min.js') }}"></script> -->
-  <!-- <script src="{{ url_for('static', filename='scripts/klorofil-common.js') }}"></script> -->
+  <script src="{{ url_for('static', filename='vendor/jquery-slimscroll/jquery.slimscroll.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='scripts/klorofil-common.js') }}"></script>
 </body>
 
 </html>

@@ -311,16 +311,33 @@ def view_record(record_id):
         q = accounts.find_one({'username': username})
         for s in q['records']:
             if s['id'] == record_id:
+                for c in q['categories']:
+                    if c['id'] == s['category_id']:
+                        # request_data = s
+                        # request_data_str = json.dumps(request_data)
+                        # response = make_response(request_data_str, 200)
+                        # response.headers['Content-Type'] = 'application/json'
+                        #
+                        # return response
+                        print(c['type'])
+                        if c['type'] == 'expense':
+                            # increase balance
+                            accounts.update({"username": username}, {"$inc": {'balance': float(s['amount'])}})
+                        elif c['type'] == 'income':
+                            # deduct balance
+                            q_bal = accounts.find_one({'username': username})
+                            balance = float(q_bal['balance'] - int(s['amount']))
+                            accounts.update({"username": username}, {"$set": {'balance': balance}})
                 request_data = s
                 request_data_str = json.dumps(request_data)
                 response = make_response(request_data_str, 200)
-
                 accounts.update({'username': username},
                                 {"$pull": {"records": {"id": record_id}}}, False, True)
 
                 response.headers['Content-Type'] = 'application/json'
 
                 return response
+
     accounts = mongo.db.accounts
     username = decoded['sub']
     q = accounts.find_one({'username':username})
