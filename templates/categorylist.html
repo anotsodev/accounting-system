@@ -29,7 +29,7 @@
 					
 					<div class="modal-body">
 						<p>Type</p>
-						<form>
+						<form id='new-cat-form'>
 							<label class="fancy-radio">
 								<input name="type" value="income" type="radio">
 								<span><i></i>Income</span>
@@ -104,5 +104,7 @@
 		<!-- END TABLE STRIPED -->
 	</div>
 </div>
-<script src="{{ url_for('static', filename='js/get-categories.js') }}"></script>
+<script src="{{ url_for('static', filename='js/list-categories.js') }}"></script>
+<script src="{{ url_for('static', filename='js/session-check.js') }}"></script>
+<script src="{{ url_for('static', filename='js/add-new-cat-page.js') }}"></script>
 {% endblock %}

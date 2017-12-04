@@ -206,7 +206,19 @@ def records():
                 for y in q['categories']:
                     if y['id'] == data['category_id']:
                         type = y['type']
+                if type == "":
+                    error = {'message': 'Please choose category'}
+                    error_str = json.dumps(error)
+                    response = make_response(error_str, 404)
+                    response.headers['Content-Type'] = 'application/json'
+                    return response
 
+                if data['amount'] == "":
+                    error = {'message': 'invalid amount input'}
+                    error_str = json.dumps(error)
+                    response = make_response(error_str, 400)
+                    response.headers['Content-Type'] = 'application/json'
+                    return response
                 if int(data['amount']) < 1:
                     error = {'message': 'invalid amount input'}
                     error_str = json.dumps(error)
@@ -428,15 +440,29 @@ def login_user():
         basic_auth = basic_auth.replace("Basic","")
         basic_auth = base64.b64decode(basic_auth)
         basic_auth = basic_auth.decode('utf-8')
-    except:
-        error = {'message': "Invalid username or password"}
-        error_str = json.dumps(error)
-        response = make_response(error_str, 401)
-        response.headers['Content-Type'] = 'application/json'
-        return response
 
-    if ':' not in basic_auth:
-        error = {'message': "Invalid username or password"}
+        if basic_auth == ':':
+            error = {'message': "Please enter your username and password"}
+            error_str = json.dumps(error)
+            response = make_response(error_str, 401)
+            response.headers['Content-Type'] = 'application/json'
+            return response
+
+        if basic_auth.split(':')[1] == "":
+            error = {'message': "Please enter your password"}
+            error_str = json.dumps(error)
+            response = make_response(error_str, 401)
+            response.headers['Content-Type'] = 'application/json'
+            return response
+
+        if ':' not in basic_auth:
+            error = {'message': "Invalid username or password"}
+            error_str = json.dumps(error)
+            response = make_response(error_str, 401)
+            response.headers['Content-Type'] = 'application/json'
+            return response
+    except:
+        error = {'message': "Invalid request body"}
         error_str = json.dumps(error)
         response = make_response(error_str, 401)
         response.headers['Content-Type'] = 'application/json'
@@ -464,11 +490,6 @@ def login_user():
 
             except Exception as e:
                 return e
-    error = {'message': "Invalid username or password"}
-    error_str = json.dumps(error)
-    response = make_response(error_str, 401)
-    response.headers['Content-Type'] = 'application/json'
-    return response
 
 # user logout
 @app.route('/users/logout', methods=['POST'])
@@ -540,6 +561,6 @@ def get_users(username):
 
 if __name__ == '__main__':
     # default port is 5000
-    app.run(host= '0.0.0.0')
+    app.run()
 
 

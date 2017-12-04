@@ -25,7 +25,7 @@
         <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
         <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script><![endif]-->
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+    <!-- <script src="{{ url_for('static', filename='js/app.js') }}"></script> -->
   </head>
   <body>
     <div class="page login-page">
@@ -93,15 +93,18 @@
       </div>
     </div>
     <!-- Javascript files-->
-    <script type="text/javascript">
-      if(sessionStorage.getItem('username') && sessionStorage.getItem('token_key')){
-            window.location.href = '/dashboard';
-      }
-    </script>
     <script src="{{ url_for('static', filename='login-register/vendor/popper.js/umd/popper.min.js') }}"> </script>
     <script src="{{ url_for('static', filename='login-register/vendor/bootstrap/js/bootstrap.min.js') }}"></script>
     <script src="{{ url_for('static', filename='login-register/vendor/jquery.cookie/jquery.cookie.js') }}"> </script>
     <script src="{{ url_for('static', filename='login-register/vendor/jquery-validation/jquery.validate.min.js') }}"></script>
     <script src="{{ url_for('static', filename='login-register/js/front.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/register.js') }}"></script>
+    <script type="text/javascript">
+      $( document ).ready(function(){
+          if(sessionStorage.getItem('token_key') && sessionStorage.getItem('username')){
+            window.location.href='/dashboard'
+          }
+      });
+    </script>
   </body>
 </html>

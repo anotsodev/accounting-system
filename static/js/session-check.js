@@ -1,11 +1,7 @@
 $( document ).ready(function() {
-		var url = "http://10.5.92.201:5000";
-		if(!sessionStorage.getItem('username') && !sessionStorage.getItem('token_key')){
-			sessionStorage.clear();
-	        window.location.href = '/login';
-		}else {
-			 $( "#nav-username-display" ).html(sessionStorage.getItem('username'));
-		}
+		// for dashboard only
+		// var url = "http://10.5.92.201:5000";
+		var url = "http://localhost:5000";
 		var settings = {
 		  "async": true,
 		  "crossDomain": true,
@@ -16,6 +12,9 @@ $( document ).ready(function() {
 		    "authorization": sessionStorage.getItem('token_key'),
 		    "cache-control": "no-cache",
 		  },
+		  success: function(){
+		  	disp_user();
+		  },
 		  error: function (request, message, error) {
 		  		sessionStorage.clear();
 	            window.location.href = '/login';
@@ -23,4 +22,8 @@ $( document ).ready(function() {
 		}
 
 		$.ajax(settings);
+		
+		function disp_user(){
+			$( "#nav-username-display" ).html(sessionStorage.getItem('username'));
+		}
 });
