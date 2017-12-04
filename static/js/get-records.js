@@ -58,21 +58,21 @@ function get_cat_name(response, val){
     $( "#records-rows-all" ).html(records_rows_a);
 }
 
-// function delete_record(rid) {
-//   var settings = {
-//     "async": true,
-//     "crossDomain": true,
-//     "url": url+"/records/"+rid,
-//     "method": "DELETE",
-//     "headers": {
-//       "accept": "application/json",
-//       "authorization": sessionStorage.getItem('token_key'),
-//       "cache-control": "no-cache",
-//     },
-//     success: function(){
-//       window.location.href = '/transactionhistory';
-//     }
-//   }
+function delete_record(rid) {
+  var settings = {
+    "async": true,
+    "crossDomain": true,
+    "url": url+"/records/"+rid,
+    "method": "DELETE",
+    "headers": {
+      "accept": "application/json",
+      "authorization": sessionStorage.getItem('token_key'),
+      "cache-control": "no-cache",
+    },
+    success: function(){
+      window.location.href = '/transactionhistory';
+    }
+  }
 
-//   $.ajax(settings);
-// }
+  $.ajax(settings);
+}
