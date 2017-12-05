@@ -13,6 +13,7 @@ CORS(app)
 
 app.config['MONGO_DBNAME'] = 'accounting-system'
 app.config['SECRET'] = 'secret' # change this
+
 mongo = PyMongo(app)
 
 # CATEGORY SECTION
@@ -68,12 +69,19 @@ def categories():
                 accounts = mongo.db.accounts
                 q = accounts.find_one({'categories.name':data['name'],'category.type':data['type']})
                 pattern = re.compile("([A-Za-z])\w+")
-                if not pattern.match(data['name']):
-                    error = {'message': "please enter valid category name"}
+                # if not pattern.match(data['name']):
+                #     error = {'message': "please enter valid category name"}
+                #     error_str = json.dumps(error)
+                #     response = make_response(error_str, 400)
+                #     response.headers['Content-Type'] = 'application/json'
+                #     return response
+                if not data['name'].isalpha():
+                    error = {'message': "Please enter valid category name"}
                     error_str = json.dumps(error)
                     response = make_response(error_str, 400)
                     response.headers['Content-Type'] = 'application/json'
                     return response
+
                 if q:
                     error = {'message': data['name']+" is already in the categories"}
                     error_str = json.dumps(error)

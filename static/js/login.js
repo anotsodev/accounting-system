@@ -56,5 +56,5 @@ function encode_base64(string) {
       return encodedString
 }
 function handler_err(error_message,id){
-  $( "#error-message"+"-"+id ).html("<b>"+JSON.parse(error_message)['message']+"</b>");
+  $( "#error-message"+"-"+id ).html("<b>"+JSON.parse(error_message)['message']+"</b></br>");
 }
