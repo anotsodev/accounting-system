@@ -5,8 +5,8 @@ from flask import make_response
 from flask import render_template
 import requests
 
-# api_url = 'http://10.5.92.201:5000/'
-api_url = 'http://localhost:5000/'
+api_url = 'http://10.5.92.201:5000/'
+#api_url = 'http://localhost:5000/'
 app = Flask(__name__)
 
 @app.route('/',methods=['GET'])

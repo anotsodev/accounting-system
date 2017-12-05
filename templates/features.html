@@ -1,9 +1,69 @@
 <!DOCTYPE html>
-<html>
+<!--[if lt IE 7 ]> <html class="ie ie6 no-js" lang="en"> <![endif]-->
+<!--[if IE 7 ]>    <html class="ie ie7 no-js" lang="en"> <![endif]-->
+<!--[if IE 8 ]>    <html class="ie ie8 no-js" lang="en"> <![endif]-->
+<!--[if IE 9 ]>    <html class="ie ie9 no-js" lang="en"> <![endif]-->
+<!--[if gt IE 9]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
-	<title>Features</title>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Moneyger</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="keywords" content="css3, css-only, fullscreen, background, slideshow, images, content" />
+    <link rel="shortcut icon" href="favicon.ico">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/demo.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style1.css') }}">
+    <script type="text/javascript" src="{{ url_for('static', filename='js/modernizr.custom.86080.js') }}"></script>
 </head>
-<body>
-feed me some codes
+<body id="page">
+    
+    <ul class="cb-slideshow">
+        <li><span></span><div></div></li>
+        <li><span></span><div></div></li>
+        <li><span></span><div></div></li>
+        <li><span></span><div></div></li>
+        <li><span></span><div></div></li>
+        <li><span></span><div></div></li>
+    </ul>
+    
+    <div class="site-wrapper">
+        
+        <div class="site-wrapper-inner">
+            <div class="cover-container">
+                
+                <header class="masthead clearfix">
+                    
+                    <div class="inner">
+                        <div style="margin-left:-85%;">
+                            <a href="#"><img src="{{ url_for('static', filename='img/ZLOGO.png') }}" width="150" height="40"/>
+                            </a>
+                        </div>
+                        <nav class="nav nav-masthead" style="margin-top: -3.5%">
+                            
+                            <a class="nav-link" href="/">Home</a>
+                            
+                            <a class="nav-link active" href="/features">Features</a>
+                            <a class="nav-link" href="/login">Login</a>
+                        </nav>
+                        <!-- </div>-->
+                    </div>
+                    
+                    
+                </header>
+                
+                <div class="center">
+                    <main role="main" class="inner cover">
+                        
+                        
+                        <img src="{{ url_for('static', filename='img/features.png') }}" style="margin-left:-110%; margin-top: -45%;" width= 800 height= 500 />
+                        
+                        
+                    </main>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+    
 </body>
 </html>

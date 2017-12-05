@@ -1,5 +1,5 @@
  $( document ).ready(function() {
-        var url = "http://localhost:5000"
+        var url = "http://10.5.92.201:5000"
         $( "#register" ).click(function() {
 
         var data = JSON.stringify($('form').serializeObject());

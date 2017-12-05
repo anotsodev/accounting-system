@@ -1,61 +1,75 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <link rel="icon" href="../../../../favicon.ico">
+<!DOCTYPE html>
+<!--[if lt IE 7 ]> <html class="ie ie6 no-js" lang="en"> <![endif]-->
+<!--[if IE 7 ]>    <html class="ie ie7 no-js" lang="en"> <![endif]-->
+<!--[if IE 8 ]>    <html class="ie ie8 no-js" lang="en"> <![endif]-->
+<!--[if IE 9 ]>    <html class="ie ie9 no-js" lang="en"> <![endif]-->
+<!--[if gt IE 9]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Moneyger</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="keywords" content="css3, css-only, fullscreen, background, slideshow, images, content" />
+    <link rel="shortcut icon" href="favicon.ico">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/demo.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style1.css') }}">
+    <script type="text/javascript" src="{{ url_for('static', filename='js/modernizr.custom.86080.js') }}"></script>
+</head>
 
-    <title>Cover Template for Bootstrap</title>
 
-    <!-- Bootstrap core CSS -->
-    <link href="{{ url_for('static', filename='vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
 
-    <!-- Custom styles for this template -->
-    <link href="{{ url_for('static', filename='css/cover.css') }}" rel="stylesheet">
-  </head>
-
-  <body>
-
+<body id="page">
+    
+    <ul class="cb-slideshow">
+        <li><span></span><div></div></li>
+        <li><span></span><div></div></li>
+        <li><span></span><div></div></li>
+        <li><span></span><div></div></li>
+        <li><span></span><div></div></li>
+        <li><span></span><div></div></li>
+    </ul>
+    
     <div class="site-wrapper">
-
-      <div class="site-wrapper-inner">
-
-        <div class="cover-container">
-		
-          <header class="masthead clearfix">
-            <div class="inner"> 
-			<!--<img src="icon.png" alt="moneyger" height="10px" width="40px">--> 
-              <h3 class="masthead-brand" > <a href="#" style=text-decoration:none;>M O N E Y G E R</a></h3> 
-              <nav class="nav nav-masthead">
-                <a class="nav-link active" href="/">Home</a>
-                <!-- <a class="nav-link" href="contact/index.html">Contact Us</a> -->
-                <a class="nav-link" href="/features">Features</a>
-				<a class="nav-link" href="/login">Login</a>
-              </nav>
+        
+        <div class="site-wrapper-inner">
+            <div class="cover-container">
+                
+                <header class="masthead clearfix">
+                    
+                    <div class="inner">
+                        <div style="margin-left:-85%;">
+                            <a href="#"><img src="{{ url_for('static', filename='img/ZLOGO.png') }}" width="150" height="40"/>
+                            </a>
+                        </div>
+                        <nav class="nav nav-masthead" style="margin-top: -3.5%">
+                            
+                            <a class="nav-link active" href="/">Home</a>
+                            
+                            <a class="nav-link" href="/features">Features</a>
+                            <a class="nav-link" href="/login">Login</a>
+                        </nav>
+                        <!-- </div>-->
+                    </div>
+                    
+                    
+                </header>
+                
+                <div class="center">
+                    <main role="main" class="inner cover">
+                        <h1 class="cover-heading">M O N E Y G E R</h1>
+                        <p class="lead">Be the boss of your money.</p>
+                        <br></br>
+                        
+                        <p class="lead">
+                            <a href="/register" class="btn btn-lg btn-secondary">Manage Now</a>
+                        </p>
+                    </main>
+                </div>
+                
             </div>
-          </header>
-
-          <main role="main" class="inner cover">
-            <h1 class="cover-heading">M O N E Y G E R</h1>
-            <p class="lead">Be the boss of your own money.</p>
-            <p class="lead">
-              <a href="/register" class="btn btn-lg btn-secondary">Manage Now</a>
-            </p>
-          </main>
-
-         
-
         </div>
-
-      </div>
-
     </div>
+    
+</body>
 
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-  </body>
 </html>

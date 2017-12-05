@@ -1,7 +1,7 @@
 $( document ).ready(function() {
 		// for dashboard only
 		// var url = "http://10.5.92.201:5000";
-		var url = "http://localhost:5000";
+		var url = "http://10.5.92.201:5000";
 		var settings = {
 		  "async": true,
 		  "crossDomain": true,
