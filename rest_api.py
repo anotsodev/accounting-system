@@ -8,6 +8,7 @@ import base64
 import re
 import uuid
 
+
 app = Flask(__name__)
 CORS(app)
 
@@ -21,6 +22,14 @@ mongo = PyMongo(app)
 def categories():
     # Start Token Checking
     token_key = request.headers.get('Authorization')
+    if not token_key:
+        error = {'message': "Invalid Token"}
+        error_str = json.dumps(error)
+        response = make_response(error_str, 400)
+        response.headers['Content-Type'] = 'application/json'
+        response.headers['Access-Control-Allow-Origin'] = '*'
+        response.headers['Connection'] = 'close'
+        return response
     try:
         decoded = jwt.decode(token_key, app.config['SECRET'], algorithms=['HS256'])
     except:
@@ -28,6 +37,8 @@ def categories():
         error_str = json.dumps(error)
         response = make_response(error_str, 400)
         response.headers['Content-Type'] = 'application/json'
+        response.headers['Access-Control-Allow-Origin'] = '*'
+        response.headers['Connection'] = 'close'
         return response
 
     blacklisted = mongo.db.blacklisted
@@ -37,6 +48,8 @@ def categories():
         error_str = json.dumps(error)
         response = make_response(error_str, 400)
         response.headers['Content-Type'] = 'application/json'
+        response.headers['Access-Control-Allow-Origin'] = '*'
+        response.headers['Connection'] = 'close'
         return response
     # End of Token Checking
 
@@ -57,12 +70,16 @@ def categories():
                 error_str = json.dumps(error)
                 response = make_response(error_str, 400)
                 response.headers['Content-Type'] = 'application/json'
+                response.headers['Access-Control-Allow-Origin'] = '*'
+                response.headers['Connection'] = 'close'
                 return response
             if data['type'] not in types:
                 error["invalid_fields"].append({"field": "type","reason": data['type']+" is not one of "+str(types)})
                 error_str = json.dumps(error)
                 response = make_response(error_str,400)
                 response.headers['Content-Type'] = 'application/json'
+                response.headers['Access-Control-Allow-Origin'] = '*'
+                response.headers['Connection'] = 'close'
                 return response
             else:
             # if body is valid, insert data to db
@@ -80,6 +97,8 @@ def categories():
                     error_str = json.dumps(error)
                     response = make_response(error_str, 400)
                     response.headers['Content-Type'] = 'application/json'
+                    response.headers['Access-Control-Allow-Origin'] = '*'
+                    response.headers['Connection'] = 'close'
                     return response
 
                 if q:
@@ -87,6 +106,8 @@ def categories():
                     error_str = json.dumps(error)
                     response = make_response(error_str, 400)
                     response.headers['Content-Type'] = 'application/json'
+                    response.headers['Access-Control-Allow-Origin'] = '*'
+                    response.headers['Connection'] = 'close'
                     return response
 
                 unique_id = uuid.uuid1()
@@ -98,6 +119,8 @@ def categories():
                     return_data_str = json.dumps(return_data)
                     response = make_response(return_data_str,200)
                     response.headers['Content-Type'] = 'application/json'
+                    response.headers['Access-Control-Allow-Origin'] = '*'
+                    response.headers['Connection'] = 'close'
                     return response
         else:
         # if request content-type is not json, this will return an error response
@@ -105,6 +128,8 @@ def categories():
             error_str = json.dumps(error)
             response = make_response(error_str, 415)
             response.headers['Content-Type'] = 'application/json'
+            response.headers['Access-Control-Allow-Origin'] = '*'
+            response.headers['Connection'] = 'close'
             return response
 
     # this will return all the categories if the method is not POST
@@ -115,12 +140,22 @@ def categories():
     request_data = json.dumps(q['categories'])
     response = make_response(request_data,200)
     response.headers['Content-Type'] = 'application/json'
+    response.headers['Access-Control-Allow-Origin'] = '*'
+    response.headers['Connection'] = 'close'
     return request_data
 
 @app.route('/categories/<category_id>',methods=['GET'])
 def view_category(category_id):
     # Start Token Checking
     token_key = request.headers.get('Authorization')
+    if not token_key:
+        error = {'message': "Invalid Token"}
+        error_str = json.dumps(error)
+        response = make_response(error_str, 400)
+        response.headers['Content-Type'] = 'application/json'
+        response.headers['Access-Control-Allow-Origin'] = '*'
+        response.headers['Connection'] = 'close'
+        return response
     try:
         decoded = jwt.decode(token_key, app.config['SECRET'], algorithms=['HS256'])
     except:
@@ -128,6 +163,8 @@ def view_category(category_id):
         error_str = json.dumps(error)
         response = make_response(error_str, 400)
         response.headers['Content-Type'] = 'application/json'
+        response.headers['Access-Control-Allow-Origin'] = '*'
+        response.headers['Connection'] = 'close'
         return response
 
     blacklisted = mongo.db.blacklisted
@@ -137,6 +174,8 @@ def view_category(category_id):
         error_str = json.dumps(error)
         response = make_response(error_str, 400)
         response.headers['Content-Type'] = 'application/json'
+        response.headers['Access-Control-Allow-Origin'] = '*'
+        response.headers['Connection'] = 'close'
         return response
     # End of Token Checking
     # This will check the category if the category id is same with the request category id
@@ -150,13 +189,16 @@ def view_category(category_id):
             request_data_str = json.dumps(request_data)
             response = make_response(request_data_str, 200)
             response.headers['Content-Type'] = 'application/json'
-
+            response.headers['Access-Control-Allow-Origin'] = '*'
+            response.headers['Connection'] = 'close'
             return response
 
     error = {'message': 'category not found'}
     error_str = json.dumps(error)
     response = make_response(error_str, 404)
     response.headers['Content-Type'] = 'application/json'
+    response.headers['Access-Control-Allow-Origin'] = '*'
+    response.headers['Connection'] = 'close'
     return response
 
 # RECORDS SECTION
@@ -164,6 +206,14 @@ def view_category(category_id):
 def records():
     # Start Token Checking
     token_key = request.headers.get('Authorization')
+    if not token_key:
+        error = {'message': "Invalid Token"}
+        error_str = json.dumps(error)
+        response = make_response(error_str, 400)
+        response.headers['Content-Type'] = 'application/json'
+        response.headers['Access-Control-Allow-Origin'] = '*'
+        response.headers['Connection'] = 'close'
+        return response
     username = ""
     try:
         decoded = jwt.decode(token_key, app.config['SECRET'], algorithms=['HS256'])
@@ -172,6 +222,8 @@ def records():
         error_str = json.dumps(error)
         response = make_response(error_str, 400)
         response.headers['Content-Type'] = 'application/json'
+        response.headers['Access-Control-Allow-Origin'] = '*'
+        response.headers['Connection'] = 'close'
         return response
 
     blacklisted = mongo.db.blacklisted
@@ -181,6 +233,8 @@ def records():
         error_str = json.dumps(error)
         response = make_response(error_str, 400)
         response.headers['Content-Type'] = 'application/json'
+        response.headers['Access-Control-Allow-Origin'] = '*'
+        response.headers['Connection'] = 'close'
         return response
     # end of token checking section
     if request.method == 'POST':
@@ -191,18 +245,24 @@ def records():
                 error_str = json.dumps(error)
                 response = make_response(error_str, 400)
                 response.headers['Content-Type'] = 'application/json'
+                response.headers['Access-Control-Allow-Origin'] = '*'
+                response.headers['Connection'] = 'close'
                 return response
             if "category_id" not in data:
                 error = {'message': 'invalid request body'}
                 error_str = json.dumps(error)
                 response = make_response(error_str, 400)
                 response.headers['Content-Type'] = 'application/json'
+                response.headers['Access-Control-Allow-Origin'] = '*'
+                response.headers['Connection'] = 'close'
                 return response
             if "description" not in data:
                 error = {'message': 'invalid request body'}
                 error_str = json.dumps(error)
                 response = make_response(error_str, 400)
                 response.headers['Content-Type'] = 'application/json'
+                response.headers['Access-Control-Allow-Origin'] = '*'
+                response.headers['Connection'] = 'close'
                 return response
             else:
                 accounts = mongo.db.accounts
@@ -219,6 +279,8 @@ def records():
                     error_str = json.dumps(error)
                     response = make_response(error_str, 404)
                     response.headers['Content-Type'] = 'application/json'
+                    response.headers['Access-Control-Allow-Origin'] = '*'
+                    response.headers['Connection'] = 'close'
                     return response
 
                 if data['amount'] == "":
@@ -226,12 +288,16 @@ def records():
                     error_str = json.dumps(error)
                     response = make_response(error_str, 400)
                     response.headers['Content-Type'] = 'application/json'
+                    response.headers['Access-Control-Allow-Origin'] = '*'
+                    response.headers['Connection'] = 'close'
                     return response
                 if int(data['amount']) < 1:
                     error = {'message': 'invalid amount input'}
                     error_str = json.dumps(error)
                     response = make_response(error_str, 400)
                     response.headers['Content-Type'] = 'application/json'
+                    response.headers['Access-Control-Allow-Origin'] = '*'
+                    response.headers['Connection'] = 'close'
                     return response
                 if type == "income":
                     try:
@@ -241,6 +307,8 @@ def records():
                         error_str = json.dumps(error)
                         response = make_response(error_str, 404)
                         response.headers['Content-Type'] = 'application/json'
+                        response.headers['Access-Control-Allow-Origin'] = '*'
+                        response.headers['Connection'] = 'close'
                         return response
 
                 if type == "expense":
@@ -253,6 +321,8 @@ def records():
                         error_str = json.dumps(error)
                         response = make_response(error_str, 404)
                         response.headers['Content-Type'] = 'application/json'
+                        response.headers['Access-Control-Allow-Origin'] = '*'
+                        response.headers['Connection'] = 'close'
                         return response
 
                 all_categories = [x['id'] for x in q['categories']]
@@ -266,18 +336,24 @@ def records():
                     return_data_str = json.dumps(return_data)
                     response = make_response(return_data_str, 200)
                     response.headers['Content-Type'] = 'application/json'
+                    response.headers['Access-Control-Allow-Origin'] = '*'
+                    response.headers['Connection'] = 'close'
                     return response
                 else:
                     error = {'message': 'category not found'}
                     error_str = json.dumps(error)
                     response = make_response(error_str, 404)
                     response.headers['Content-Type'] = 'application/json'
+                    response.headers['Access-Control-Allow-Origin'] = '*'
+                    response.headers['Connection'] = 'close'
                     return response
         else:
             error = {"detail": "Invalid Content-type (application/json), expected JSON data","status": 415,"title": "Unsupported Media Type","type": "about:blank"}
             error_str = json.dumps(error)
             response = make_response(error_str, 415)
             response.headers['Content-Type'] = 'application/json'
+            response.headers['Access-Control-Allow-Origin'] = '*'
+            response.headers['Connection'] = 'close'
             return response
 
 
@@ -289,12 +365,22 @@ def records():
     request_data = json.dumps(sorted_obj['records'])
     response = make_response(request_data, 200)
     response.headers['Content-Type'] = 'application/json'
+    response.headers['Access-Control-Allow-Origin'] = '*'
+    response.headers['Connection'] = 'close'
     return response
 
 @app.route('/records/<record_id>',methods=['GET','DELETE'])
 def view_record(record_id):
     # Start Token Checking
     token_key = request.headers.get('Authorization')
+    if not token_key:
+        error = {'message': "Invalid Token"}
+        error_str = json.dumps(error)
+        response = make_response(error_str, 400)
+        response.headers['Content-Type'] = 'application/json'
+        response.headers['Access-Control-Allow-Origin'] = '*'
+        response.headers['Connection'] = 'close'
+        return response
     try:
         decoded = jwt.decode(token_key, app.config['SECRET'], algorithms=['HS256'])
     except:
@@ -302,6 +388,8 @@ def view_record(record_id):
         error_str = json.dumps(error)
         response = make_response(error_str, 400)
         response.headers['Content-Type'] = 'application/json'
+        response.headers['Access-Control-Allow-Origin'] = '*'
+        response.headers['Connection'] = 'close'
         return response
 
     blacklisted = mongo.db.blacklisted
@@ -311,6 +399,8 @@ def view_record(record_id):
         error_str = json.dumps(error)
         response = make_response(error_str, 400)
         response.headers['Content-Type'] = 'application/json'
+        response.headers['Access-Control-Allow-Origin'] = '*'
+        response.headers['Connection'] = 'close'
         return response
     # End of Token Checking
     if request.method == 'DELETE':
@@ -321,12 +411,7 @@ def view_record(record_id):
             if s['id'] == record_id:
                 for c in q['categories']:
                     if c['id'] == s['category_id']:
-                        # request_data = s
-                        # request_data_str = json.dumps(request_data)
-                        # response = make_response(request_data_str, 200)
-                        # response.headers['Content-Type'] = 'application/json'
-                        #
-                        # return response
+                    
                         print(c['type'])
                         if c['type'] == 'expense':
                             # increase balance
@@ -343,7 +428,8 @@ def view_record(record_id):
                                 {"$pull": {"records": {"id": record_id}}}, False, True)
 
                 response.headers['Content-Type'] = 'application/json'
-
+                response.headers['Access-Control-Allow-Origin'] = '*'
+                response.headers['Connection'] = 'close'
                 return response
 
     accounts = mongo.db.accounts
@@ -355,12 +441,15 @@ def view_record(record_id):
             request_data_str = json.dumps(request_data)
             response = make_response(request_data_str, 200)
             response.headers['Content-Type'] = 'application/json'
-
+            response.headers['Access-Control-Allow-Origin'] = '*'
+            response.headers['Connection'] = 'close'
             return response
     error = {'message': 'record not found'}
     error_str = json.dumps(error)
     response = make_response(error_str, 404)
     response.headers['Content-Type'] = 'application/json'
+    response.headers['Access-Control-Allow-Origin'] = '*'
+    response.headers['Connection'] = 'close'
     return response
 
 
@@ -369,94 +458,114 @@ def view_record(record_id):
 @app.route('/users', methods=['POST'])
 def create_user():
     # check if request is json
-    if request.is_json:
-        data = request.get_json()
-        # check for username key if existing
-        required = ['username','password','firstName','lastName','email', 'balance', 'phone']
-        incomplete = False
-        error = {"invalid_fields":[]}
-        for r in required:
-            if r not in data.keys():
-                error["invalid_fields"].append({"field": r, "reason": r + " is a required property"})
-                incomplete = True
-
-        if incomplete:
-            error_str = json.dumps(error)
-            response = make_response(error_str, 400)
-            response.headers['Content-Type'] = 'application/json'
-            return response
-
-        else:
-            # check password if in pattern, return 400 response error if not match, else continue
-            error = {"invalid_fields":[]}
+    try:
+        if request.is_json:
+            data = request.get_json()
+            # check for username key if existing
+            required = ['username','password','firstName','lastName','email', 'balance', 'phone']
             incomplete = False
-            password_pattern = re.compile("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[^\\w\\s]).{8,}$")
-            email_pattern = re.compile("(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)")
-            username_pattern = re.compile("([a-z]+[_]+[a-z]*)")
+            error = {"invalid_fields":[]}
+            for r in required:
+                if r not in data.keys():
+                    error["invalid_fields"].append({"field": r, "reason": r + " is a required property"})
+                    incomplete = True
 
-            if not username_pattern.match(data['username']):
-                error["invalid_fields"].append({"field": 'username',
-                                             "reason": "usernames must only have lowercase letters and underscore. Example: john_doe"})
-                incomplete = True
-            if not password_pattern.match(data['password']):
-                error["invalid_fields"].append({"field": 'password', "reason": "password does not match '^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[^\\\\w\\\\s]).{8,}$'"})
-                incomplete = True
-            if not email_pattern.match(data['email']):
-                error["invalid_fields"].append({"field": 'email',
-                                             "reason": "email does not match '^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)'"})
-                incomplete = True
-            if data['password'] != data['confirm_password']:
-                error["invalid_fields"].append({"field": 'password',
-                                                "reason": "passwords does not match"})
-                incomplete = True
-            if data['balance'] == "":
-                data['balance'] = 0.0
-            else:
-                data['balance'] = float(data['balance'])
             if incomplete:
                 error_str = json.dumps(error)
                 response = make_response(error_str, 400)
                 response.headers['Content-Type'] = 'application/json'
+                response.headers['Access-Control-Allow-Origin'] = '*'
+                response.headers['Connection'] = 'close'
                 return response
 
-        # Insert database section
-        # Encrypt password
-        hashed_password = sha256_crypt.hash(data['password'])
-        data['password'] = hashed_password
-
-        # check for existing user
-        accounts = mongo.db.accounts
-        q = accounts.find_one({'username':data['username']})
-        if q:
-            error = {"invalid_fields": [{"field": 'username',
-                                         "reason": "User "+data['username']+" already existed"}]}
-            error_str = json.dumps(error)
-            response = make_response(error_str, 400)
-            response.headers['Content-Type'] = 'application/json'
-            return response
-        else:
-            data.update({'categories':[],'records':[]})
-            if mongo.db.accounts.insert(data):
-                # Return response
-                return_data = {"balance": data['balance'],"email": data['email'],"phone": data['phone'],"username": data['username']}
-                return_data_str = json.dumps(return_data)
-                response = make_response(return_data_str, 200)
-                response.headers['Content-Type'] = 'application/json'
-                return response
             else:
-                error = {'message': "there's something wrong when inserting the data"}
+                # check password if in pattern, return 400 response error if not match, else continue
+                error = {"invalid_fields":[]}
+                incomplete = False
+                password_pattern = re.compile("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[^\\w\\s]).{8,}$")
+                email_pattern = re.compile("(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)")
+                username_pattern = re.compile("([a-z]+[_]+[a-z]*)")
+
+                if not username_pattern.match(data['username']):
+                    error["invalid_fields"].append({"field": 'username',
+                                                 "reason": "usernames must only have lowercase letters and underscore. Example: john_doe"})
+                    incomplete = True
+                if not password_pattern.match(data['password']):
+                    error["invalid_fields"].append({"field": 'password', "reason": "password does not match '^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[^\\\\w\\\\s]).{8,}$'"})
+                    incomplete = True
+                if not email_pattern.match(data['email']):
+                    error["invalid_fields"].append({"field": 'email',
+                                                 "reason": "email does not match '^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)'"})
+                    incomplete = True
+                if data['password'] != data['confirm_password']:
+                    error["invalid_fields"].append({"field": 'password',"reason": "passwords does not match"})
+                    incomplete = True
+                if data['balance'] == "":
+                    data['balance'] = 0.0
+                else:
+                    data['balance'] = float(data['balance'])
+                if incomplete:
+                    error_str = json.dumps(error)
+                    response = make_response(error_str, 400)
+                    response.headers['Content-Type'] = 'application/json'
+                    response.headers['Access-Control-Allow-Origin'] = '*'
+                    response.headers['Connection'] = 'close'
+                    return response
+
+            # Insert database section
+            # Encrypt password
+            hashed_password = sha256_crypt.hash(data['password'])
+            data['password'] = hashed_password
+
+            # check for existing user
+            accounts = mongo.db.accounts
+            q = accounts.find_one({'username':data['username']})
+            if q:
+                error = {"invalid_fields": [{"field": 'username',
+                                             "reason": "User "+data['username']+" already existed"}]}
                 error_str = json.dumps(error)
                 response = make_response(error_str, 400)
                 response.headers['Content-Type'] = 'application/json'
+                response.headers['Access-Control-Allow-Origin'] = '*'
+                response.headers['Connection'] = 'close'
                 return response
-    # return error of not a json request
-    else:
-        error = {"detail": "Invalid Content-type (application/json), expected JSON data","status": 415,"title": "Unsupported Media Type","type": "about:blank"}
+            else:
+                data.update({'categories':[],'records':[]})
+                if mongo.db.accounts.insert(data):
+                    # Return response
+                    return_data = {"balance": data['balance'],"email": data['email'],"phone": data['phone'],"username": data['username']}
+                    return_data_str = json.dumps(return_data)
+                    response = make_response(return_data_str, 200)
+                    response.headers['Content-Type'] = 'application/json'
+                    response.headers['Access-Control-Allow-Origin'] = '*'
+                    response.headers['Connection'] = 'close'
+                    return response
+                else:
+                    error = {'message': "there's something wrong when inserting the data"}
+                    error_str = json.dumps(error)
+                    response = make_response(error_str, 400)
+                    response.headers['Content-Type'] = 'application/json'
+                    response.headers['Access-Control-Allow-Origin'] = '*'
+                    response.headers['Connection'] = 'close'
+                    return response
+        # return error of not a json request
+        else:
+            error = {"detail": "Invalid Content-type (application/json), expected JSON data","status": 415,"title": "Unsupported Media Type","type": "about:blank"}
+            error_str = json.dumps(error)
+            response = make_response(error_str, 415)
+            response.headers['Content-Type'] = 'application/json'
+            response.headers['Access-Control-Allow-Origin'] = '*'
+            response.headers['Connection'] = 'close'
+            return response
+    except Exception as e:
+        error = {"detail": "Invalid Content-type (application/json), expected JSON data", "status": 415,
+                 "title": "Unsupported Media Type", "type": "about:blank"}
         error_str = json.dumps(error)
         response = make_response(error_str, 415)
         response.headers['Content-Type'] = 'application/json'
+        response.headers['Access-Control-Allow-Origin'] = '*'
+        response.headers['Connection'] = 'close'
         return response
-
 # user login
 @app.route('/users/login', methods=['POST'])
 def login_user():
@@ -471,6 +580,8 @@ def login_user():
             error_str = json.dumps(error)
             response = make_response(error_str, 401)
             response.headers['Content-Type'] = 'application/json'
+            response.headers['Access-Control-Allow-Origin'] = '*'
+            response.headers['Connection'] = 'close'
             return response
 
         if basic_auth.split(':')[1] == "":
@@ -478,6 +589,8 @@ def login_user():
             error_str = json.dumps(error)
             response = make_response(error_str, 401)
             response.headers['Content-Type'] = 'application/json'
+            response.headers['Access-Control-Allow-Origin'] = '*'
+            response.headers['Connection'] = 'close'
             return response
 
         if ':' not in basic_auth:
@@ -485,47 +598,65 @@ def login_user():
             error_str = json.dumps(error)
             response = make_response(error_str, 401)
             response.headers['Content-Type'] = 'application/json'
+            response.headers['Access-Control-Allow-Origin'] = '*'
+            response.headers['Connection'] = 'close'
             return response
+    
+
+        accounts = mongo.db.accounts
+        username = basic_auth.split(':')[0]
+        password = basic_auth.split(':')[1]
+        q = accounts.find_one({'username':username})
+        if q:
+            if sha256_crypt.verify(password,q['password']):
+                # make token
+                try:
+                    payload = {
+                            'exp': datetime.datetime.utcnow() + datetime.timedelta(days=0, minutes=10),
+                            'iat': datetime.datetime.utcnow(),
+                            'sub': q['username']
+                        }
+                    exp_date = datetime.datetime.utcnow() + datetime.timedelta(days=0, minutes=10)
+                    generated_token = jwt.encode(payload,app.config['SECRET'],algorithm='HS256')
+                    return_data = {'token':generated_token.decode('utf-8')}
+                    return_data_str = json.dumps(return_data)
+                    response = make_response(return_data_str,200)
+                    response.headers['Content-Type'] = 'application/json'
+                    response.headers['Access-Control-Allow-Origin'] = '*'
+                    response.headers['Connection'] = 'close'
+                    response.headers['X-Expires-After'] = exp_date
+
+                    return response
+
+                except Exception as e:
+                    return e
+        error = {'message': "Invalid username or password"}
+        error_str = json.dumps(error)
+        response = make_response(error_str, 401)
+        response.headers['Content-Type'] = 'application/json'
+        return response
     except:
         error = {'message': "Invalid request body"}
         error_str = json.dumps(error)
         response = make_response(error_str, 401)
         response.headers['Content-Type'] = 'application/json'
+        response.headers['Access-Control-Allow-Origin'] = '*'
+        response.headers['Connection'] = 'close'
         return response
-
-    accounts = mongo.db.accounts
-    username = basic_auth.split(':')[0]
-    password = basic_auth.split(':')[1]
-    q = accounts.find_one({'username':username})
-    if q:
-        if sha256_crypt.verify(password,q['password']):
-            # make token
-            try:
-                payload = {
-                        'exp': datetime.datetime.utcnow() + datetime.timedelta(days=0, minutes=10),
-                        'iat': datetime.datetime.utcnow(),
-                        'sub': q['username']
-                    }
-                generated_token = jwt.encode(payload,app.config['SECRET'],algorithm='HS256')
-                return_data = {'token':generated_token.decode('utf-8')}
-                return_data_str = json.dumps(return_data)
-                response = make_response(return_data_str,200)
-                response.headers['Content-Type'] = 'application/json'
-                return response
-
-            except Exception as e:
-                return e
-    error = {'message': "Invalid username or password"}
-    error_str = json.dumps(error)
-    response = make_response(error_str, 401)
-    response.headers['Content-Type'] = 'application/json'
-    return response
 
 # user logout
 @app.route('/users/logout', methods=['POST'])
 def logout():
     # Start Token Checking
     token_key = request.headers.get('Authorization')
+    if not token_key:
+        error = {'message': "Invalid Token"}
+        error_str = json.dumps(error)
+        response = make_response(error_str, 400)
+        response.headers['Content-Type'] = 'application/json'
+        response.headers['Access-Control-Allow-Origin'] = '*'
+        response.headers['Connection'] = 'close'
+        return response
     try:
         decoded = jwt.decode(token_key, app.config['SECRET'], algorithms=['HS256'])
     except:
@@ -533,6 +664,8 @@ def logout():
         error_str = json.dumps(error)
         response = make_response(error_str, 400)
         response.headers['Content-Type'] = 'application/json'
+        response.headers['Access-Control-Allow-Origin'] = '*'
+        response.headers['Connection'] = 'close'
         return response
 
     blacklisted = mongo.db.blacklisted
@@ -542,6 +675,8 @@ def logout():
         error_str = json.dumps(error)
         response = make_response(error_str, 400)
         response.headers['Content-Type'] = 'application/json'
+        response.headers['Access-Control-Allow-Origin'] = '*'
+        response.headers['Connection'] = 'close'
         return response
     # End of Token Checking
 
@@ -550,6 +685,8 @@ def logout():
     return_data = {'message': 'OK'}
     return_data_str = json.dumps(return_data)
     response = make_response(return_data_str,200)
+    response.headers['Access-Control-Allow-Origin'] = '*'
+    response.headers['Connection'] = 'close'
     return response
 
 # retrieve user
@@ -557,6 +694,14 @@ def logout():
 def get_users(username):
     # Start Token Checking
     token_key = request.headers.get('Authorization')
+    if not token_key:
+        error = {'message': "Invalid Token"}
+        error_str = json.dumps(error)
+        response = make_response(error_str, 400)
+        response.headers['Content-Type'] = 'application/json'
+        response.headers['Access-Control-Allow-Origin'] = '*'
+        response.headers['Connection'] = 'close'
+        return response
     try:
         decoded = jwt.decode(token_key, app.config['SECRET'], algorithms=['HS256'])
     except:
@@ -564,6 +709,8 @@ def get_users(username):
         error_str = json.dumps(error)
         response = make_response(error_str, 400)
         response.headers['Content-Type'] = 'application/json'
+        response.headers['Access-Control-Allow-Origin'] = '*'
+        response.headers['Connection'] = 'close'
         return response
 
     blacklisted = mongo.db.blacklisted
@@ -573,6 +720,8 @@ def get_users(username):
         error_str = json.dumps(error)
         response = make_response(error_str, 400)
         response.headers['Content-Type'] = 'application/json'
+        response.headers['Access-Control-Allow-Origin'] = '*'
+        response.headers['Connection'] = 'close'
         return response
     # End of Token Checking
 
@@ -582,15 +731,17 @@ def get_users(username):
         request_data = {"balance": q['balance'],"email": q['email'],"firstName": q['firstName'],"lastName": q['lastName'],"phone": q['phone'],"username": q['username']}
         request_data = json.dumps(request_data)
         response = make_response(request_data,200)
+        response.headers['Access-Control-Allow-Origin'] = '*'
+        response.headers['Connection'] = 'close'
         return response
 
     error = {'message':'User not found'}
     error_str = json.dumps(error)
     response = make_response(error_str, 404)
+    response.headers['Access-Control-Allow-Origin'] = '*'
+    response.headers['Connection'] = 'close'
     return response
 
 if __name__ == '__main__':
     # default port is 5000
     app.run(host='0.0.0.0')
-
-
