@@ -486,6 +486,7 @@ def create_user():
                 email_pattern = re.compile("(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)")
                 username_pattern = re.compile("([a-z]+[_]+[a-z]*)")
 
+
                 if not username_pattern.match(data['username']):
                     error["invalid_fields"].append({"field": 'username',
                                                  "reason": "usernames must only have lowercase letters and underscore. Example: john_doe"})
@@ -497,8 +498,12 @@ def create_user():
                     error["invalid_fields"].append({"field": 'email',
                                                  "reason": "email does not match '^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)'"})
                     incomplete = True
-                if data['password'] != data['confirm_password']:
-                    error["invalid_fields"].append({"field": 'password',"reason": "passwords does not match"})
+                try:
+                    if data['password'] != data['confirm_password']:
+                        error["invalid_fields"].append({"field": 'password',"reason": "password and confirm password does not match"})
+                        incomplete = True
+                except:
+                    error["invalid_fields"].append({"field": 'password', "reason": "passwords and confirm password does not match"})
                     incomplete = True
                 if data['balance'] == "":
                     data['balance'] = 0.0
@@ -531,6 +536,7 @@ def create_user():
                 return response
             else:
                 data.update({'categories':[],'records':[]})
+                del data['confirm_password']
                 if mongo.db.accounts.insert(data):
                     # Return response
                     return_data = {"balance": data['balance'],"email": data['email'],"phone": data['phone'],"username": data['username']}
@@ -634,9 +640,11 @@ def login_user():
         error_str = json.dumps(error)
         response = make_response(error_str, 401)
         response.headers['Content-Type'] = 'application/json'
+        response.headers['Access-Control-Allow-Origin'] = '*'
+        response.headers['Connection'] = 'close'
         return response
     except:
-        error = {'message': "Invalid request body"}
+        error = {'message': "Invalid username or password"}
         error_str = json.dumps(error)
         response = make_response(error_str, 401)
         response.headers['Content-Type'] = 'application/json'

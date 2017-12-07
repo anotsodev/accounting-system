@@ -23,6 +23,7 @@
     <link rel="shortcut icon" href="favicon.png">
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700" rel="stylesheet">
     <script src="{{ url_for('static', filename='vendor/jquery/jquery.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/app-config.js') }}"></script>
     
   </head>
 <body>
@@ -75,7 +76,6 @@
   <!-- <script src="{{ url_for('static', filename='vendor/jquery/jquery.min.js') }}"> </script> -->
   <script type="text/javascript">
     $(document).ready(function(){
-      var url = "http://localhost:5000";
       $( "#logout-account" ).click(function() {
           var settings = {
                 "async": true,

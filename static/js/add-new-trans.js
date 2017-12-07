@@ -1,5 +1,4 @@
 $(document).ready(function(){
-	var url = "http://10.5.92.201:5000";
 	$( "#add-new-trans" ).click(function() {
 	      var data = JSON.stringify($('#new-trans-form').serializeObject());
 	      var settings = {

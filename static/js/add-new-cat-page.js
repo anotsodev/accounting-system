@@ -1,5 +1,6 @@
 $(document).ready(function(){
-	var url = "http://10.5.92.201:5000";
+  json_file = $.getJSON("config.json")
+  var url = json_file['url']
 	$( "#add-new-category" ).click(function() {
       var data = JSON.stringify($('#new-cat-form').serializeObject());
       var settings = {
